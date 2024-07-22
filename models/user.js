@@ -11,15 +11,36 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate (models) {
       // define association here
+      // 表示每個 User 可以有一個關聯的 Teacher
+      User.hasOne(models.Teacher, {
+        foreignKey: 'user_id',
+        as: 'teacher'
+      })
     }
   }
   User.init({
-    name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    avatar: DataTypes.STRING,
-    nation: DataTypes.STRING,
-    introduction: DataTypes.STRING
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    avatar: {
+      type: DataTypes.STRING
+    },
+    nation: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    introduction: {
+      type: DataTypes.STRING
+    }
   }, {
     sequelize,
     modelName: 'User',
