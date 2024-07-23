@@ -6,11 +6,13 @@ const bcrypt = require('bcryptjs')
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
+    const hash = await bcrypt.hash('12345678', 10)
+
     const users = await Promise.all(
       Array.from({ length: 20 }, async (_, index) => ({
         name: `user${index + 1}`,
         email: `user${index + 1}@example.com`,
-        password: await bcrypt.hash('12345678', 10),
+        password: hash,
         avatar: faker.image.avatar(),
         nation: faker.location.country(),
         introduction: faker.lorem.sentence(),
