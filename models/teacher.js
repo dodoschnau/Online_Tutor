@@ -13,17 +13,17 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       // 表示每個 Teacher 屬於一個 User
       Teacher.belongsTo(models.User, {
-        foreignKey: 'user_id',
+        foreignKey: 'userId',
         as: 'user'
       })
     }
   }
   Teacher.init({
-    teaching_style: DataTypes.STRING,
-    vedio_link: DataTypes.STRING,
-    lesson_duration: DataTypes.INTEGER,
-    lesson_description: DataTypes.TEXT,
-    user_id: {
+    teachingStyle: DataTypes.STRING,
+    videoLink: DataTypes.STRING,
+    lessonDuration: DataTypes.INTEGER,
+    lessonDescription: DataTypes.TEXT,
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false
     }

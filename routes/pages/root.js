@@ -10,7 +10,7 @@ router.get('/register', (req, res) => {
 })
 
 router.get('/', (req, res) => {
-  res.redirect('index')
+  res.redirect('teachers')
 })
 
 module.exports = router

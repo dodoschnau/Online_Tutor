@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       // 表示每個 User 可以有一個關聯的 Teacher
       User.hasOne(models.Teacher, {
-        foreignKey: 'user_id',
+        foreignKey: 'userId',
         as: 'teacher'
       })
     }
