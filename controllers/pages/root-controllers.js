@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs')
 const { User } = require('../../models')
 
-const userControllers = {
+const rootControllers = {
   loginPage: async (req, res) => {
     res.render('login')
   },
@@ -27,4 +27,4 @@ const userControllers = {
   }
 }
 
-module.exports = userControllers
+module.exports = rootControllers
