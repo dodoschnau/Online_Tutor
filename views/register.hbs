@@ -5,7 +5,7 @@
     </div>
     <div class="card-body fs-3">
 
-      <form action="/users" method="POST">
+      <form action="/register" method="POST">
         <div>
           <div>
             <label for="inputName" class="form-label">Name</label>
@@ -32,10 +32,16 @@
           <input type="password" class="form-control mb-4 border-2" id="inputPasswordConfirm"
             placeholder="Confirm Password" name="confirmPassword">
         </div>
+        <div>
+          <div>
+            <label for="inputNation" class="form-label">Nation</label>
+          </div>
+          <input type="text" class="form-control mb-3 border-2" id="inputNation" name="nation" placeholder="Enter Nation">
+        </div>
 
         {{!-- Register Button --}}
         <button type="submit" class="btn btn-primary mb-3 fw-bold">Register</button>
-      
+
       </form>
 
       {{!-- Login Button --}}
