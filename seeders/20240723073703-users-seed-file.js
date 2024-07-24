@@ -9,7 +9,7 @@ module.exports = {
     const hash = await bcrypt.hash('12345678', 10)
 
     const users = await Promise.all(
-      Array.from({ length: 20 }, async (_, index) => ({
+      Array.from({ length: 60 }, async (_, index) => ({
         name: `user${index + 1}`,
         email: `user${index + 1}@example.com`,
         password: hash,

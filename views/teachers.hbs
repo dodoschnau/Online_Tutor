@@ -16,7 +16,7 @@
 
       <!-- Teacher cards area -->
       <div class="row">
-        {{#each users}}
+        {{#each teachers}}
         <div class="col-md-4 mb-4">
           <div class="card border-primary h-100 d-flex">
             <div class="d-flex align-items-center p-3">
@@ -37,4 +37,45 @@
       </div>
     </div>
   </div>
+</div>
+
+{{!-- Pagination --}}
+<div class="d-flex justify-content-center mb-5">
+  <ul class="pagination">
+
+    {{!-- Previous Button --}}
+    <form action="/teachers" method="GET" class="d-flex">
+      <li class="page-item me-2">
+        <button type="submit"
+          class="btn btn-secondary {{#ifCond pagination.page 1}}disabled{{/ifCond}}">Previous
+          <input type="hidden" name="page" value="{{pagination.prev}}">
+          <input type="hidden" name="keyword" value="{{keyword}}">
+        </button>
+      </li>
+    </form>
+
+    {{!-- Pages --}}
+    {{#each pagination.pages}}
+    <form action="/teachers" method="GET" class="d-flex">
+      <li class="page-item page-button me-2">
+        <button type="submit" class="btn btn-primary {{#ifCond this ../pagination.page}}disabled{{/ifCond}}">{{this}}
+          <input type="hidden" name="page" value="{{this}}">
+          <input type="hidden" name="keyword" value="{{../keyword}}">
+        </button>
+      </li>
+    </form>
+    {{/each}}
+
+    {{!-- Next Button --}}
+    <form action="/teachers" method="GET" class="d-flex">
+      <li class="page-item">
+        <button type="submit"
+          class="btn btn-secondary {{#ifCond pagination.page pagination.totalPages}}disabled{{/ifCond}}">Next
+          <input type="hidden" name="page" value="{{pagination.next}}">
+          <input type="hidden" name="keyword" value="{{keyword}}">
+        </button>
+      </li>
+    </form>
+
+  </ul>
 </div>
