@@ -8,24 +8,24 @@ const rootControllers = {
   registerPage: async (req, res) => {
     res.render('register')
   },
-  register: async (req, res) => {
+  register: async (req, res, next) => {
     try {
       const { name, email, password, confirmPassword, nation } = req.body
-      if (!name || !email || !nation) {
-        req.flash('error', 'Please fill in all fields.')
-        return res.redirect('/register')
-      }
-      if (password !== confirmPassword) {
-        req.flash('error', 'Passwords do not match.')
-        return res.redirect('/register')
-      }
+
+      if (!name || !email || !nation) throw new Error('Please fill in all fields.')
+      if (password !== confirmPassword) throw new Error('Passwords do not match.')
+
+      const existingUser = await User.findOne({ where: { email } })
+      if (existingUser) throw new Error('Email already exists.')
+
       const hashedPassword = await bcrypt.hash(password, 10)
-      await User.create({ name, email, password: hashedPassword, nation })
+
+      const user = await User.create({ name, email, password: hashedPassword, nation })
+      if (!user) throw new Error('Failed to create user.')
       req.flash('success', 'Account created successfully.')
       return res.redirect('/login')
     } catch (error) {
-      console.log(error)
-      return res.redirect('/register')
+      next(error)
     }
   }
 }

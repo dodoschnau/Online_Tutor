@@ -15,6 +15,7 @@
       </form>
 
       <!-- Teacher cards area -->
+      {{#if teachers}}
       <div class="row">
         {{#each teachers}}
         <div class="col-md-4 mb-4">
@@ -35,6 +36,13 @@
         </div>
         {{/each}}
       </div>
+      {{else}}
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h3>No teachers found.</h3>
+        </div>
+      </div>
+      {{/if}}
     </div>
   </div>
 </div>
@@ -46,8 +54,7 @@
     {{!-- Previous Button --}}
     <form action="/teachers" method="GET" class="d-flex">
       <li class="page-item me-2">
-        <button type="submit"
-          class="btn btn-secondary {{#ifCond pagination.page 1}}disabled{{/ifCond}}">Previous
+        <button type="submit" class="btn btn-secondary {{#ifCond pagination.page 1}}disabled{{/ifCond}}">Previous
           <input type="hidden" name="page" value="{{pagination.prev}}">
           <input type="hidden" name="keyword" value="{{keyword}}">
         </button>
