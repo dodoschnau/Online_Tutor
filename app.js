@@ -11,6 +11,7 @@ const SESSION_SECRET = 'secret'
 const { pages } = require('./routes')
 const handlebarsHelpers = require('./helpers/handlebars-helpers')
 const messageHandler = require('./middlewares/message-handler')
+const { getUser } = require('./helpers/auth-helpers')
 
 app.engine('.hbs', engine({
   extname: '.hbs',
@@ -32,6 +33,10 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use(messageHandler)
+app.use((req, res, next) => {
+  res.locals.user = getUser(req)
+  next()
+})
 
 app.use(pages)
 

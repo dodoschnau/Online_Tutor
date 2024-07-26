@@ -11,6 +11,8 @@ router.post('/register', rootControllers.register)
 // Check login field first, then authenticate
 router.post('/login', checkLoginField, passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }), rootControllers.login)
 
+router.post('/logout', rootControllers.logout)
+
 router.get('/', (req, res) => {
   res.redirect('teachers')
 })

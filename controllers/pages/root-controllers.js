@@ -2,10 +2,10 @@ const bcrypt = require('bcryptjs')
 const { User } = require('../../models')
 
 const rootControllers = {
-  loginPage: async (req, res) => {
+  loginPage: (req, res) => {
     res.render('login')
   },
-  registerPage: async (req, res) => {
+  registerPage: (req, res) => {
     res.render('register')
   },
   register: async (req, res, next) => {
@@ -28,9 +28,16 @@ const rootControllers = {
       next(error)
     }
   },
-  login: async (req, res) => {
+  login: (req, res) => {
     req.flash('success', 'Logged in successfully.')
     return res.redirect('/teachers')
+  },
+  logout: async (req, res, next) => {
+    req.logout((err) => {
+      if (err) return next(err)
+      req.flash('success', 'Logged out successfully.')
+      return res.redirect('/login')
+    })
   }
 }
 

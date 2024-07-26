@@ -1,7 +1,34 @@
 <header>
-  <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark px-4">
+  <nav class="navbar navbar-expand-lg fixed-top bg-dark px-4" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">Tutor</a>
-    </div>
+      <a class="navbar-brand fs-3" href="/teachers">Tutor</a>
+
+      {{#if user}}
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+        aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+        {{!-- User Profile --}}
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item fs-5 d-inline-flex align-items-center me-2">
+            <span class="text-secondary">Hello, {{user.name}}</span>
+          </li>
+          <li class="nav-item fs-5 d-inline-flex align-items-center">
+            <a class="nav-link" aria-current="page" href="/users/{{user.id}}"><button
+                class="btn btn-outline-secondary my-sm-0 my-2 fw-bold">My Profile</button></a>
+          </li>
+        </ul>
+
+        {{!-- Logout Button --}}
+        <div class="nav-item">
+          <form action="/logout" method="post">
+            <button class="btn btn-outline-success my-sm-0 my-2" type="submit">Logout</button>
+          </form>
+        </div>
+        {{/if}}
+
+      </div>
   </nav>
 </header>
