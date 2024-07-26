@@ -12,7 +12,7 @@ const rootControllers = {
     try {
       const { name, email, password, confirmPassword, nation } = req.body
 
-      if (!name || !email || !nation) throw new Error('Please fill in all fields.')
+      if (!name || !email || !nation || !password) throw new Error('Please fill in all fields.')
       if (password !== confirmPassword) throw new Error('Passwords do not match.')
 
       const existingUser = await User.findOne({ where: { email } })
@@ -27,6 +27,10 @@ const rootControllers = {
     } catch (error) {
       next(error)
     }
+  },
+  login: async (req, res) => {
+    req.flash('success', 'Logged in successfully.')
+    return res.redirect('/teachers')
   }
 }
 
