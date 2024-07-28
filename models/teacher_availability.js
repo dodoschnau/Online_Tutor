@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-  class Teacher extends Model {
+  class TeacherAvailability extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,31 +11,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate (models) {
       // define association here
-      // 表示每個 Teacher 屬於一個 User
-      Teacher.belongsTo(models.User, {
-        foreignKey: 'userId',
-        as: 'user'
-      })
-      Teacher.hasMany(models.TeacherAvailability, {
+      TeacherAvailability.hasOne(models.Teacher, {
         foreignKey: 'teacherId',
-        as: 'availableTime'
+        as: 'availableTeacher'
       })
     }
   }
-  Teacher.init({
-    teachingStyle: DataTypes.STRING,
-    videoLink: DataTypes.STRING,
-    lessonDuration: DataTypes.INTEGER,
-    lessonDescription: DataTypes.TEXT,
-    userId: {
+  TeacherAvailability.init({
+    date: DataTypes.DATEONLY,
+    startTime: DataTypes.TIME,
+    endTime: DataTypes.TIME,
+    teacherId: {
       type: DataTypes.INTEGER,
       allowNull: false
     }
   }, {
     sequelize,
-    modelName: 'Teacher',
-    tableName: 'Teachers',
+    modelName: 'TeacherAvailability',
+    tableName: 'teacher_availabilities',
     underscored: true
   })
-  return Teacher
+  return TeacherAvailability
 }
