@@ -40,6 +40,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     introduction: {
       type: DataTypes.STRING
+    },
+    isTeacher: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     }
   }, {
     sequelize,

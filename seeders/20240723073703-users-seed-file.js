@@ -16,6 +16,7 @@ module.exports = {
         avatar: faker.image.avatar(),
         nation: faker.location.country(),
         introduction: faker.lorem.sentence(),
+        is_teacher: index < 30, // 只有前30個使用者是老師
         created_at: new Date(),
         updated_at: new Date()
       }))

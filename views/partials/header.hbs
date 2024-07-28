@@ -19,6 +19,15 @@
             <a class="nav-link" aria-current="page" href="/users/{{user.id}}"><button
                 class="btn btn-outline-secondary my-sm-0 my-2 fw-bold">My Profile</button></a>
           </li>
+
+          {{!-- Apply Teacher Button --}}
+          {{#ifCond user.isTeacher false}}
+          <li class="nav-item fs-5 d-inline-flex align-items-center">
+            <a class="nav-link" aria-current="page" href="/users/applyTeacher"><button
+                class="btn btn-outline-secondary my-sm-0 my-2 fw-bold">Apply Teacher</button></a>
+          </li>
+          {{/ifCond}}
+
         </ul>
 
         {{!-- Logout Button --}}

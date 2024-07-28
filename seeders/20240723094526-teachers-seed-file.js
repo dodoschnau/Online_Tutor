@@ -5,7 +5,7 @@ const { faker } = require('@faker-js/faker')
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    // 從現有id只取出前10個使用者(升序)
+    // 從現有id只取出前30個使用者(升序)
     const users = await queryInterface.sequelize.query(
       'SELECT id FROM Users ORDER BY id ASC LIMIT 30',
       { type: Sequelize.QueryTypes.SELECT }
