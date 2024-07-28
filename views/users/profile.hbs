@@ -1,0 +1,62 @@
+<div class="container mt-5">
+  <div class="row">
+    {{!-- User Information --}}
+    {{> profile-left-column}}
+
+    <div class="col-md-8">
+      <!-- New Schedule -->
+      <h2>New Schedule</h2>
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="border p-2">
+            <p class="mb-0">Times:</p>
+            <p class="mb-0">Teacher's Name:</p>
+            <p class="mb-0">Session Link:</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="border p-2">
+            <p class="mb-0">Time:</p>
+            <p class="mb-0">Teacher's Name:</p>
+            <p class="mb-0">Session Link:</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lesson History -->
+      <h2>Lesson History</h2>
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="border p-2 d-flex justify-content-between align-items-center mb-2">
+            <img src="{{user.avatar}}" alt="avatar" class="rounded-circle" width="50" height="50">
+            <span>Teacher's Name</span>
+            <button class="btn btn-primary btn-sm">Score</button>
+          </div>
+          <div class="border p-2 d-flex justify-content-between align-items-center">
+            <img src="{{user.avatar}}" alt="avatar" class="rounded-circle" width="50" height="50">
+            <span>Teacher's Name</span>
+            <button class="btn btn-primary btn-sm">Score</button>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="border p-2 d-flex justify-content-between align-items-center mb-2">
+            <img src="{{user.avatar}}" alt="avatar" class="rounded-circle" width="50" height="50">
+            <span>Teacher's Name</span>
+            <button class="btn btn-primary btn-sm">Score</button>
+          </div>
+          <div class="border p-2 d-flex justify-content-between align-items-center">
+            <img src="{{user.avatar}}" alt="avatar" class="rounded-circle" width="50" height="50">
+            <span>Teacher's Name</span>
+            <button class="btn btn-primary btn-sm">Score</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Study Hours Ranking -->
+      <h2>My Study Hours Ranking</h2>
+      <div class="border p-2">
+        <p class="mb-0">Ranking:</p>
+      </div>
+    </div>
+  </div>
+</div>
