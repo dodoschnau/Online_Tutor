@@ -1,0 +1,41 @@
+{{#ifCond user.isTeacher false}}
+<div class="container mt-5">
+  <h1 class="mb-4">Apply for a Teacher</h1>
+  <form action="/users/applyTeacher" method="POST">
+    <div class="mb-3 fs-4">
+      <label for="introduction" class="form-label">Your Introduction:</label>
+      <textarea id="introduction" name="introduction" class="form-control" rows="4" placeholder="Please fill in your introduction here." required></textarea>
+    </div>
+
+    <div class="mb-3 fs-4">
+      <label for="teachingStyle" class="form-label">Your Teaching Style:</label>
+      <textarea id="teachingStyle" name="teachingStyle" class="form-control" rows="4" placeholder="Please fill in your teaching style here." required></textarea>
+    </div>
+
+        <div class="mb-3 fs-4">
+          <label for="lessonDescription" class="form-label">Lesson Description:</label>
+          <textarea id="lessonDescription" name="lessonDescription" class="form-control" rows="4"
+            placeholder="Please fill in your lesson description here." required></textarea>
+        </div>
+
+    <div class="mb-3 fs-4">
+      <label for="lessonDuration" class="form-label">Single Class Duration (minutes):</label>
+      <select id="lessonDuration" name="lessonDuration" class="form-select" required>
+        <option value="60" selected>60</option>
+        <option value="90">90</option>
+      </select>
+    </div>
+
+    <div class="mb-3 fs-4">
+      <label for="videoLink" class="form-label">Lesson's Video Link:</label>
+      <input type="url" id="videoLink" name="videoLink" class="form-control" placeholder="Please provide a valid video link." required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{{else}}
+<div class="container mt-5">
+  <h1 class="mb-4">You are already a teacher!</h1>
+</div>
+{{/ifCond}}
