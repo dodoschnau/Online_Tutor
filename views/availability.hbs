@@ -53,7 +53,7 @@
   <div class="d-flex mb-3">
     {{#each this.times}}
     {{!-- Delete button --}}
-    <form action="/availabilities/{{teacherId}}" method="POST">
+    <form action="/availabilities/{{this.id}}?_method=DELETE" method="POST">
       <button type="submit" class="btn btn-outline-danger me-2"><i class="fa-solid fa-trash"></i></button>
     </form>
 
@@ -64,10 +64,6 @@
   <hr>
 
 </ul>
-
-<div>
-
-</div>
 {{/each}}
 
 {{else}}

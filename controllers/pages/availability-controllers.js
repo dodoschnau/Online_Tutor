@@ -79,6 +79,27 @@ const availabilityControllers = {
     } catch (error) {
       next(error)
     }
+  },
+  deleteAvailability: async (req, res, next) => {
+    try {
+      const userId = req.user.id
+      const teacher = await checkIfTeacher(userId)
+      const id = req.params.id
+
+      if (!teacher) {
+        throw new Error('You are not authorized to delete this availability.')
+      }
+
+      const availability = await TeacherAvailability.findByPk(id)
+      if (!availability) throw new Error('Availability not found!')
+
+      await availability.destroy()
+
+      req.flash('success', 'Successfully deleted availability!')
+      return res.redirect('/availabilities')
+    } catch (error) {
+      next(error)
+    }
   }
 }
 

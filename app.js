@@ -3,6 +3,7 @@ const { engine } = require('express-handlebars')
 const session = require('express-session')
 const flash = require('connect-flash')
 const passport = require('passport')
+const methodOverride = require('method-override')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -21,6 +22,7 @@ app.set('view engine', '.hbs')
 app.set('views', './views')
 
 app.use(express.urlencoded({ extended: true }))
+app.use(methodOverride('_method'))
 
 app.use(session({
   secret: SESSION_SECRET,

@@ -5,5 +5,6 @@ const availabilityControllers = require('../../controllers/pages/availability-co
 
 router.get('/', availabilityControllers.getAvailabilities)
 router.post('/', availabilityControllers.postAvailability)
+router.delete('/:id', availabilityControllers.deleteAvailability)
 
 module.exports = router
