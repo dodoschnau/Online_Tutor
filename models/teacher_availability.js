@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'TeacherAvailability',
-    tableName: 'teacher_availabilities',
+    tableName: 'TeacherAvailabilities',
     underscored: true
   })
   return TeacherAvailability

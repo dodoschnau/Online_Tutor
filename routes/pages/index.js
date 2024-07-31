@@ -4,10 +4,12 @@ const router = express.Router()
 const root = require('./root')
 const teachers = require('./teachers')
 const users = require('./users')
+const availabilities = require('./availabilities')
 
 const { generalErrorHandler } = require('../../middlewares/error-handler')
 const { authenticated } = require('../../middlewares/auth')
 
+router.use('/availabilities', authenticated, availabilities)
 router.use('/teachers', authenticated, teachers)
 router.use('/users', authenticated, users)
 router.use('/', root)

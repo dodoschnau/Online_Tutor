@@ -17,7 +17,8 @@
 
   {{!-- Edit Button --}}
   {{#if user.isTeacher}}
-  <a href="/users/{{user.id}}/edit"><button class="btn btn-primary mt-3">Edit Profile & Booking Calendar</button></a>
+  <a href="/users/{{user.id}}/edit"><button class="btn btn-primary mt-3">Edit Profile </button></a>
+  <a href="/availabilities"><button class="btn btn-primary mt-3">Edit Available Times</button></a>
   {{else}}
   <a href="/users/{{user.id}}/edit"><button class="btn btn-primary mt-3">Edit Profile</button></a>
   {{/if}}
