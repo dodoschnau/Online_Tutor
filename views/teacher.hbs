@@ -1,0 +1,49 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-3">
+      <!-- 左側圖片區域 -->
+      <div class="mb-3 text-center">
+        <img src="{{teacher.user.avatar}}" class="rounded" alt="Teacher-Image" width="250" height="250">
+      </div>
+    </div>
+    <div class="col-md-3">
+      <!-- 中間教師資訊區域 -->
+      <h1>{{teacher.user.name}}</h1>
+      <p>{{teacher.user.nation}}</p>
+      <p>❤ 4.8</p>
+    </div>
+    <div class="col-md-6">
+      <!-- 右側預約區域 -->
+      <form action="/teacher/{{teacher.id}}/book" method="POST">
+        <div class="bg-light p-3">
+          <h4>預約上課</h4>
+          <!-- Choose Date and Time -->
+          {{#each processedAvailabilities}}
+          <h3>{{@key}}</h3>
+          <select name="selectedTime" class="form-select mb-2" id="dateSelect">
+            <option value="" selected>Choose Time</option>
+            {{#each this}}
+            <option value="{{start}} - {{end}}">{{start}} - {{end}}</option>
+            {{/each}}
+          </select>
+          {{/each}}
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div>
+    <h3>Introduction</h3>
+    <p>{{teacher.user.introduction}}</p>
+
+    <h3>Teaching Style</h3>
+    <p>{{teacher.teachingStyle}}</p>
+
+    <h3>Lesson History</h3>
+    <p><span class="bg-warning px-1">4.8</span> Big company announcement or simple sub-header taking two or more
+      lines.</p>
+    <p><span class="bg-warning px-1">4.8</span> Big company announcement or simple sub-header taking two or more
+      lines.</p>
+  </div>
+</div>

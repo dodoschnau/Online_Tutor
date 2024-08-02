@@ -21,6 +21,7 @@
       <div class="row">
         {{#each teachers}}
         <div class="col-md-4 mb-4">
+          <a href="/teachers/{{this.teacher.id}}" class="card border-primary h-100 d-flex">
           <div class="card border-primary h-100 d-flex">
             <div class="d-flex align-items-center p-3">
               <div>
@@ -35,6 +36,7 @@
               <p class="card-text">{{this.teacher.lessonDescription}}</p>
             </div>
           </div>
+          </a>
         </div>
         {{/each}}
       </div>

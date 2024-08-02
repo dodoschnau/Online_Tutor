@@ -1,5 +1,5 @@
 const { TeacherAvailability } = require('../../models')
-const { generateHoursOptions, formatTimes, checkIfTeacher, checkOverlappingAvailability } = require('../../helpers/availability-helpers')
+const { generateHoursOptions, formatTimes, checkIfTeacher, checkOverlappingAvailability, groupAvailabilityByDate } = require('../../helpers/availability-teacher-side-helpers')
 
 const availabilityControllers = {
   getAvailabilities: async (req, res, next) => {
@@ -16,15 +16,7 @@ const availabilityControllers = {
         raw: true
       })
 
-      const groupAvailability = availabilities.reduce((acc, cur) => {
-        const date = cur.date
-        // If the date is not in the accumulator, add a new array with the current date
-        if (!acc[date]) {
-          acc[date] = []
-        }
-        acc[date].push(cur)
-        return acc
-      }, {})
+      const groupAvailability = groupAvailabilityByDate(availabilities)
 
       const availability = Object.keys(groupAvailability).map(date => ({
         date,

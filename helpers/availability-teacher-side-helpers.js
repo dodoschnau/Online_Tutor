@@ -1,9 +1,6 @@
 const { Op } = require('sequelize')
 const { Teacher, TeacherAvailability } = require('../models')
-
-const dayjs = require('dayjs')
-const customParseFormat = require('dayjs/plugin/customParseFormat')
-dayjs.extend(customParseFormat)
+const dayjs = require('../config/dayjs-config')
 
 module.exports = {
   // Generate hours options for the dropdown
@@ -61,5 +58,18 @@ module.exports = {
     })
 
     if (overlappingAvailability) throw new Error('The time interval overlaps with existing availability, please choose another time.')
+  },
+
+  // group availabilities by date
+  groupAvailabilityByDate: (availabilities) => {
+    return availabilities.reduce((acc, cur) => {
+      const date = cur.date
+      // If the date is not in the accumulator, add a new array with the current date
+      if (!acc[date]) {
+        acc[date] = []
+      }
+      acc[date].push(cur)
+      return acc
+    }, {})
   }
 }

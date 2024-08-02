@@ -1,6 +1,7 @@
 const { Op } = require('sequelize')
-const { User, Teacher } = require('../../models')
+const { User, Teacher, TeacherAvailability } = require('../../models')
 const { getOffset, getPagination } = require('../../helpers/pagination-helper')
+const { processAvailabilities } = require('../../helpers/availability-student-side-helpers')
 
 const teacherControllers = {
   getTeachers: async (req, res, next) => {
@@ -38,6 +39,42 @@ const teacherControllers = {
         teachers: rows,
         pagination,
         keyword
+      })
+    } catch (error) {
+      next(error)
+    }
+  },
+  getTeacher: async (req, res, next) => {
+    try {
+      const { id } = req.params
+      const teacher = await Teacher.findByPk(id, {
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['name', 'nation', 'avatar', 'introduction']
+          },
+          {
+            model: TeacherAvailability,
+            as: 'availableTime'
+          }
+        ]
+      })
+      if (!teacher) throw new Error('Cannot find teacher.')
+
+      const availabilities = teacher.toJSON().availableTime.map(slot => ({
+        date: slot.date,
+        startTime: slot.startTime,
+        endTime: slot.endTime
+      }))
+
+      const lessonDuration = teacher.toJSON().lessonDuration
+
+      const processedAvailabilities = processAvailabilities(availabilities, lessonDuration)
+
+      return res.render('teacher', {
+        teacher: teacher.toJSON(),
+        processedAvailabilities
       })
     } catch (error) {
       next(error)
