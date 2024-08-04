@@ -1,0 +1,15 @@
+<div class="container mt-5">
+  <h1>Edit Your Profile</h1>
+  <hr>
+  <form action="/users?_method=PUT" method="POST">
+
+    {{> edit-profile}}
+
+    {{!-- Submit Button --}}
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+  </form>
+</div>
+
+{{!-- Avatar Preview Script --}}
+<script src="/javascripts/avatar-preview.js"></script>

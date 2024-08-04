@@ -1,4 +1,5 @@
 const { User, Teacher } = require('../../models')
+const countries = require('world-countries')
 
 const userControllers = {
   getProfile: async (req, res, next) => {
@@ -56,6 +57,31 @@ const userControllers = {
       await user.save()
 
       return res.redirect(`/users/${userId}`)
+    } catch (error) {
+      next(error)
+    }
+  },
+  getEditProfile: async (req, res, next) => {
+    try {
+      const userId = req.params.id
+      const countryName = countries.map(country => country.name.common)
+      const user = await User.findByPk(userId, {
+        include:
+          [{
+            model: Teacher,
+            as: 'teacher'
+          }],
+        raw: true,
+        nest: true
+      })
+      if (!user) throw new Error('User not found.')
+      if (user.id !== req.user.id) throw new Error('You are not authorized to view this profile.')
+
+      if (user.isTeacher) {
+        return res.render('users/teacher-edit-profile', { user, countryName })
+      } else {
+        return res.render('users/user-edit-profile', { user, countryName })
+      }
     } catch (error) {
       next(error)
     }

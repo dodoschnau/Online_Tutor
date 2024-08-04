@@ -1,0 +1,40 @@
+<div class="form-row mb-3">
+  <label class="form-label fs-4" for="avatar">Avatar</label>
+  <div class="d-flex align-items-center">
+    <div class="position-relative" style="width: 100px; height: 100px;">
+
+      {{!-- Preview Avatar --}}
+      <img id="avatar-preview" src="{{#if user.avatar}}{{user.avatar}}{{else}}/images/default-avatar.png{{/if}}"
+        alt="Avatar Preview" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+
+      {{!-- Upload Avatar (Pencil Icon) --}}
+      <label for="avatar-upload"
+        class="position-absolute bottom-0 end-0 bg-light border border-primary rounded-circle p-1 m-1"
+        style="cursor: pointer;">
+        <i class="fa-solid fa-pencil" style="color: #256ca2;"></i>
+      </label>
+      <input type="file" id="avatar-upload" name="avatar" accept="image/*" style="display: none;">
+
+    </div>
+  </div>
+</div>
+
+<div class="mb-3 fs-4">
+  <label for="name" class="form-label">User Name</label>
+  <input type="text" class="form-control" id="name" placeholder="Please enter your name." value="{{user.name}}" required>
+</div>
+
+<div class="mb-3 fs-4">
+  <label class="form-label">Nationality</label>
+  <select name="country" class="form-select">
+    {{#each countryName}}
+    <option value="{{this}}" {{#ifCond this ../user.nation}}selected{{/ifCond}}>{{this}}</option>
+    {{/each}}
+  </select>
+</div>
+
+<div class="mb-3 fs-4">
+  <label for="introduction" class="form-label">Introduction</label>
+  <textarea class="form-control" id="introduction" rows="5"
+    placeholder="Please write a short introduction about yourself.">{{user.introduction}}</textarea>
+</div>
