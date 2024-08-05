@@ -17,6 +17,7 @@
       <form action="/teacher/{{teacher.id}}/book" method="POST">
         <div class="bg-light p-3">
           <h4>預約上課</h4>
+          {{#if availabilities}}
           <!-- Choose Date and Time -->
           {{#each processedAvailabilities}}
           <h3>{{@key}}</h3>
@@ -28,6 +29,9 @@
           </select>
           {{/each}}
           <button type="submit" class="btn btn-primary">Submit</button>
+          {{else}}
+          <p class="badge bg-dark fs-6 mt-3">No Available Times</p>
+          {{/if}}
         </div>
       </form>
     </div>

@@ -74,7 +74,8 @@ const teacherControllers = {
 
       return res.render('teacher', {
         teacher: teacher.toJSON(),
-        processedAvailabilities
+        processedAvailabilities,
+        availabilities
       })
     } catch (error) {
       next(error)
