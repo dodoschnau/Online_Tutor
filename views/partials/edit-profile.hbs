@@ -20,13 +20,13 @@
 </div>
 
 <div class="mb-3 fs-4">
-  <label for="name" class="form-label">User Name</label>
-  <input type="text" class="form-control" id="name" placeholder="Please enter your name." value="{{user.name}}" required>
+  <label for="name" class="form-label">User Name *</label>
+  <input type="text" class="form-control" id="name" name="name" placeholder="Please enter your name." value="{{user.name}}" required>
 </div>
 
 <div class="mb-3 fs-4">
-  <label class="form-label">Nationality</label>
-  <select name="country" class="form-select">
+  <label class="form-label">Nationality *</label>
+  <select name="nation" class="form-select" required>
     {{#each countryName}}
     <option value="{{this}}" {{#ifCond this ../user.nation}}selected{{/ifCond}}>{{this}}</option>
     {{/each}}
@@ -36,5 +36,5 @@
 <div class="mb-3 fs-4">
   <label for="introduction" class="form-label">Introduction</label>
   <textarea class="form-control" id="introduction" rows="5"
-    placeholder="Please write a short introduction about yourself.">{{user.introduction}}</textarea>
+    placeholder="Please write a short introduction about yourself." name="introduction">{{user.introduction}}</textarea>
 </div>

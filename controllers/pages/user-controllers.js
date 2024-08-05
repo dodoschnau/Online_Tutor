@@ -1,5 +1,6 @@
 const { User, Teacher } = require('../../models')
 const countries = require('world-countries')
+const { localFileHandler } = require('../../helpers/file-helpers')
 
 const userControllers = {
   getProfile: async (req, res, next) => {
@@ -82,6 +83,57 @@ const userControllers = {
       } else {
         return res.render('users/user-edit-profile', { user, countryName })
       }
+    } catch (error) {
+      next(error)
+    }
+  },
+  editProfile: async (req, res, next) => {
+    try {
+      const userId = req.params.id
+      const user = await User.findByPk(userId, {
+        include:
+          [{
+            model: Teacher,
+            as: 'teacher'
+          }],
+        raw: true,
+        nest: true
+      })
+      if (!user) throw new Error('User not found.')
+      if (user.id !== req.user.id) throw new Error('You are not authorized to view this profile.')
+
+      const { name, nation, introduction, teachingStyle, lessonDescription, lessonDuration, videoLink } = req.body
+
+      const { file } = req
+      let avatar
+      if (file) {
+        avatar = await localFileHandler(file)
+      } else {
+        avatar = user.avatar
+      }
+
+      // Update user
+      if (!name || !nation) throw new Error('Please fill in all the required fields.')
+
+      const updatedUser = await User.update(
+        { name, nation, introduction, avatar },
+        { where: { id: userId } }
+      )
+      if (!updatedUser) throw new Error('Failed to update user profile.')
+
+      // Update teacher
+      if (user.isTeacher) {
+        if (!teachingStyle || !lessonDescription || !lessonDuration || !videoLink) throw new Error('Please fill in all the required fields.')
+
+        const updatedTeacher = await Teacher.update(
+          { teachingStyle, lessonDescription, lessonDuration, videoLink },
+          { where: { userId } }
+        )
+        if (!updatedTeacher) throw new Error('Failed to update teacher profile.')
+      }
+
+      req.flash('success', 'Your profile has been updated successfully.')
+      return res.redirect(`/users/${userId}`)
     } catch (error) {
       next(error)
     }
