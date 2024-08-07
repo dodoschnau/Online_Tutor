@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         as: 'teacher'
       })
+      // 表示每個 User 可以有很多個 Appointment
+      User.hasMany(models.Appointment, {
+        foreignKey: 'userId',
+        as: 'appointments'
+      })
     }
   }
   User.init({

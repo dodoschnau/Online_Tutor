@@ -44,11 +44,26 @@ module.exports = {
     return slots
   },
 
+  // Check if a slot is booked
+  isSlotBooked: (slot, appointments) => {
+    const slotStart = dayjs(`2000-01-01T${slot.start}`)
+    const slotEnd = dayjs(`2000-01-01T${slot.end}`)
+    return appointments.some(appointment => {
+      const appointmentStart = dayjs(`2000-01-01T${appointment.startTime}`)
+      const appointmentEnd = dayjs(`2000-01-01T${appointment.endTime}`)
+      return (
+        (slotStart.isSame(appointmentStart) && slotEnd.isSame(appointmentEnd))
+      )
+    })
+  },
+
   // Process availabilities
-  processAvailabilities: (availabilities, lessonDuration) => {
+  processAvailabilities: (availabilities, lessonDuration, appointments) => {
     const groupedByDate = groupAvailabilityByDate(availabilities)
+    const groupedAppointments = groupAvailabilityByDate(appointments)
 
     const processedAvailability = {}
+    let hasAvailableSlots = false // to check if there is any available slots
 
     for (const [date, times] of Object.entries(groupedByDate)) {
       const mergedTimes = module.exports.mergeOverlappingTimes(times)
@@ -56,13 +71,18 @@ module.exports = {
 
       mergedTimes.forEach(time => {
         const slots = module.exports.generateSlots(time.startTime, time.endTime, lessonDuration)
-        allSlots = allSlots.concat(slots)
+        const dateAppointments = groupedAppointments[date] || []
+        const availableSlots = slots.filter(slot => !module.exports.isSlotBooked(slot, dateAppointments))
+        allSlots = allSlots.concat(availableSlots)
       })
 
       // add key: date to value: all slots
-      processedAvailability[date] = allSlots
+      if (allSlots.length > 0) {
+        processedAvailability[date] = allSlots
+        hasAvailableSlots = true
+      }
     }
 
-    return processedAvailability
+    return { processedAvailability, hasAvailableSlots }
   }
 }

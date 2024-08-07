@@ -1,5 +1,5 @@
 const { Op } = require('sequelize')
-const { User, Teacher, TeacherAvailability } = require('../../models')
+const { User, Teacher, TeacherAvailability, Appointment } = require('../../models')
 const { getOffset, getPagination } = require('../../helpers/pagination-helper')
 const { processAvailabilities } = require('../../helpers/availability-student-side-helpers')
 
@@ -47,6 +47,7 @@ const teacherControllers = {
   getTeacher: async (req, res, next) => {
     try {
       const { id } = req.params
+      const [appointmentData] = req.flash('appointment')
       const teacher = await Teacher.findByPk(id, {
         include: [
           {
@@ -70,12 +71,19 @@ const teacherControllers = {
 
       const lessonDuration = teacher.toJSON().lessonDuration
 
-      const processedAvailabilities = processAvailabilities(availabilities, lessonDuration)
+      const appointments = await Appointment.findAll({
+        where: { teacherId: id },
+        attributes: ['date', 'startTime', 'endTime'],
+        raw: true
+      })
+
+      const { processedAvailability, hasAvailableSlots } = processAvailabilities(availabilities, lessonDuration, appointments)
 
       return res.render('teacher', {
         teacher: teacher.toJSON(),
-        processedAvailabilities,
-        availabilities
+        processedAvailabilities: processedAvailability,
+        appointment: appointmentData,
+        hasAvailableSlots
       })
     } catch (error) {
       next(error)

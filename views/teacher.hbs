@@ -1,40 +1,45 @@
 <div class="container mt-4">
   <div class="row">
+
+    <!-- The left side of the page -->
     <div class="col-md-3">
-      <!-- 左側圖片區域 -->
       <div class="mb-3 text-center">
         <img src="{{teacher.user.avatar}}" class="rounded" alt="Teacher-Image" width="250" height="250">
       </div>
     </div>
+
+    <!-- The middle of the page -->
     <div class="col-md-3">
-      <!-- 中間教師資訊區域 -->
       <h1>{{teacher.user.name}}</h1>
       <p>{{teacher.user.nation}}</p>
       <p>❤ 4.8</p>
     </div>
+
+    <!-- The right side of the page -->
     <div class="col-md-6">
-      <!-- 右側預約區域 -->
-      <form action="/teacher/{{teacher.id}}/book" method="POST">
+      <form action="/users/appointment/{{teacher.id}}" method="POST">
         <div class="bg-light p-3">
-          <h4>預約上課</h4>
-          {{#if availabilities}}
+          <h4>Make an appointment</h4>
+          {{#if hasAvailableSlots}}
           <!-- Choose Date and Time -->
           {{#each processedAvailabilities}}
           <h3>{{@key}}</h3>
-          <select name="selectedTime" class="form-select mb-2" id="dateSelect">
+          <select name="selectedTime[{{@key}}]" class="form-select mb-2" id="dateSelect">
             <option value="" selected>Choose Time</option>
             {{#each this}}
             <option value="{{start}} - {{end}}">{{start}} - {{end}}</option>
             {{/each}}
           </select>
           {{/each}}
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#appointmentModal">Submit</button>
           {{else}}
           <p class="badge bg-dark fs-6 mt-3">No Available Times</p>
           {{/if}}
         </div>
       </form>
     </div>
+    
   </div>
 
   <div>
@@ -51,3 +56,46 @@
       lines.</p>
   </div>
 </div>
+
+
+<!-- Appointment Modal -->
+{{#if success_msg}}
+<div class="modal show" id="appointmentModal" tabindex="-1" style="display: block;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border border-5 border-success-subtle">
+      <div class="modal-header border-bottom border-5 border-success-subtle">
+        <h4 class="modal-title">{{success_msg}}</h4>
+      </div>
+      <div class="modal-body fs-4">
+        <h4>Below is your appointment information :</h4>
+        <p>Teacher: {{teacher.user.name}}</p>
+        <p>Date: {{appointment.date}}</p>
+        <p>Time: {{appointment.startTime}} - {{appointment.endTime}}</p>
+        <p>Video Link: {{teacher.videoLink}}</p>
+      </div>
+      <div class="modal-footer">
+        <a href="/teachers/{{teacher.id}}" class="btn btn-secondary">OK</a>
+      </div>
+    </div>
+  </div>
+</div>
+{{/if}}
+
+
+{{#if error_msg}}
+<div class="modal show" id="appointmentModal" tabindex="-1" style="display: block;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border border-5 border-danger-subtle">
+      <div class="modal-header border-bottom border-5 border-danger-subtle">
+        <h4 class="modal-title">Failed to create appointment!</h4>
+      </div>
+      <div class="modal-body fs-4">
+        <p>{{error_msg}}</p>
+      </div>
+      <div class="modal-footer">
+        <a href="/teachers/{{teacher.id}}" class="btn btn-secondary">OK</a>
+      </div>
+    </div>
+  </div>
+</div>
+{{/if}}
