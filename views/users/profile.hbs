@@ -6,23 +6,35 @@
     {{> profile-left-column}}
 
     <div class="col-md-8">
-      <!-- New Schedule -->
-      <h2>New Schedule</h2>
+      <div class="mb-3 d-flex justify-content-between align-items-center">
+        <h2>New Schedule</h2>
+        <a href="/users/{{user.id}}/schedule" class="btn btn-secondary">See All Schedule</a>
+      </div>
+
       <div class="row mb-4">
-        <div class="col-md-6">
+        {{#if appointments}}
+        {{#each appointments}}
+        <div class="col-md-6 mb-3">
           <div class="border p-2">
-            <p class="mb-0">Times:</p>
-            <p class="mb-0">Teacher's Name:</p>
-            <p class="mb-0">Session Link:</p>
+            <p class="mb-0">Date: {{this.date}}</p>
+            <p class="mb-0">Times: {{this.startTime}} - {{this.endTime}}</p>
+            <p class="mb-0">Teacher's Name: 
+              <a href="/teachers/{{this.teacher.id}}">{{this.teacher.user.name}}</a>
+            </p>
+            <p class="mb-0">Lesson Link:
+              <a href="{{this.teacher.videoLink}}">{{this.teacher.videoLink}}</a>
+            </p>
+            <p class="mb-0">Lesson Status: {{this.status}}</p>
           </div>
         </div>
-        <div class="col-md-6">
+        {{/each}}
+        {{else}}
+        <div class="col-md-6 mb-3">
           <div class="border p-2">
-            <p class="mb-0">Time:</p>
-            <p class="mb-0">Teacher's Name:</p>
-            <p class="mb-0">Session Link:</p>
+            <p class="mb-0">No schedule found.</p>
           </div>
         </div>
+        {{/if}}
       </div>
 
       <!-- Lesson History -->

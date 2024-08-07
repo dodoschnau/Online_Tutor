@@ -1,11 +1,12 @@
-const { User, Teacher } = require('../../models')
+const { User, Teacher, Appointment } = require('../../models')
 const countries = require('world-countries')
 const { localFileHandler } = require('../../helpers/file-helpers')
 
 const userControllers = {
   getProfile: async (req, res, next) => {
     try {
-      const userId = req.params.id
+      const userId = req.user.id
+      const paramsId = req.params.id
       const user = await User.findByPk(userId, {
         include:
           [{
@@ -16,12 +17,25 @@ const userControllers = {
         nest: true
       })
       if (!user) throw new Error('User not found.')
-      if (user.id !== req.user.id) throw new Error('You are not authorized to view this profile.')
+      if (parseInt(paramsId, 10) !== userId) throw new Error('You are not authorized to view this profile.')
+
+      const appointments = await Appointment.findAll({
+        where: { userId },
+        include: [{
+          model: Teacher,
+          as: 'teacher',
+          include: [{ model: User, as: 'user', attributes: ['name'] }]
+        }],
+        order: [['createdAt', 'DESC']],
+        limit: 4,
+        raw: true,
+        nest: true
+      })
 
       if (user.isTeacher) {
-        return res.render('users/teacher-profile', { user })
+        return res.render('users/teacher-profile', { user, appointments })
       } else {
-        return res.render('users/profile', { user })
+        return res.render('users/profile', { user, appointments })
       }
     } catch (error) {
       next(error)
