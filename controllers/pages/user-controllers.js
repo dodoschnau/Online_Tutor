@@ -19,22 +19,33 @@ const userControllers = {
       if (!user) throw new Error('User not found.')
       if (parseInt(paramsId, 10) !== userId) throw new Error('You are not authorized to view this profile.')
 
-      const appointments = await Appointment.findAll({
-        where: { userId },
-        include: [{
-          model: Teacher,
-          as: 'teacher',
-          include: [{ model: User, as: 'user', attributes: ['name'] }]
-        }],
-        order: [['createdAt', 'DESC']],
-        limit: 4,
-        raw: true,
-        nest: true
-      })
-
       if (user.isTeacher) {
+        const appointments = await Appointment.findAll({
+          where: { teacherId: user.teacher.id },
+          include: [{
+            model: User,
+            as: 'student',
+            attributes: ['name']
+          }],
+          order: [['createdAt', 'DESC']],
+          limit: 4,
+          raw: true,
+          nest: true
+        })
         return res.render('users/teacher-profile', { user, appointments })
       } else {
+        const appointments = await Appointment.findAll({
+          where: { userId },
+          include: [{
+            model: Teacher,
+            as: 'teacher',
+            include: [{ model: User, as: 'user', attributes: ['name'] }]
+          }],
+          order: [['createdAt', 'DESC']],
+          limit: 4,
+          raw: true,
+          nest: true
+        })
         return res.render('users/profile', { user, appointments })
       }
     } catch (error) {

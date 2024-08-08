@@ -18,13 +18,18 @@
           <div class="border p-2">
             <p class="mb-0">Date: {{this.date}}</p>
             <p class="mb-0">Times: {{this.startTime}} - {{this.endTime}}</p>
-            <p class="mb-0">Teacher's Name: 
+            <p class="mb-0">Teacher's Name:
               <a href="/teachers/{{this.teacher.id}}">{{this.teacher.user.name}}</a>
             </p>
             <p class="mb-0">Lesson Link:
               <a href="{{this.teacher.videoLink}}">{{this.teacher.videoLink}}</a>
             </p>
             <p class="mb-0">Lesson Status: {{this.status}}</p>
+            <div class="d-flex justify-content-end">
+              <form action="/users/appointments/{{this.id}}?_method=DELETE" method="POST">
+                <button class="btn btn-danger btn-sm">Cancel</button>
+              </form>
+            </div>
           </div>
         </div>
         {{/each}}
