@@ -162,6 +162,53 @@ const userControllers = {
     } catch (error) {
       next(error)
     }
+  },
+  getSchedule: async (req, res, next) => {
+    try {
+      const userId = req.user.id
+      const paramsId = req.params.id
+      const user = await User.findByPk(userId, {
+        include:
+          [{
+            model: Teacher,
+            as: 'teacher'
+          }],
+        raw: true,
+        nest: true
+      })
+      if (!user) throw new Error('User not found.')
+      if (parseInt(paramsId, 10) !== userId) throw new Error('You are not authorized to view this profile.')
+
+      if (user.isTeacher) {
+        const appointments = await Appointment.findAll({
+          where: { teacherId: user.teacher.id },
+          include: [{
+            model: User,
+            as: 'student',
+            attributes: ['name']
+          }],
+          order: [['date', 'ASC']],
+          raw: true,
+          nest: true
+        })
+        return res.render('users/schedule', { user, appointments })
+      } else {
+        const appointments = await Appointment.findAll({
+          where: { userId },
+          include: [{
+            model: Teacher,
+            as: 'teacher',
+            include: [{ model: User, as: 'user', attributes: ['name'] }]
+          }],
+          order: [['date', 'ASC']],
+          raw: true,
+          nest: true
+        })
+        return res.render('users/schedule', { user, appointments })
+      }
+    } catch (error) {
+      next(error)
+    }
   }
 }
 

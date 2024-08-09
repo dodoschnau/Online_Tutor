@@ -1,0 +1,52 @@
+<div class="col-md-8">
+  <div class="mb-3 d-flex justify-content-between align-items-center">
+    <h2>Your All Schedule</h2>
+    <a href="/users/{{user.id}}" class="btn btn-primary">Back</a>
+  </div>
+  <p>Your pending or confirmed schedule will be shown here.</p>
+
+  <div class="row mb-4">
+    {{#if appointments}}
+    {{#each appointments}}
+    <div class="col-md-6 mb-3">
+      <div class="border p-2">
+        <p class="mb-0">Date: {{this.date}}</p>
+        <p class="mb-0">Times: {{this.startTime}} - {{this.endTime}}</p>
+        {{#if ../user.isTeacher}}
+        <p class="mb-0">Student's Name: {{this.student.name}}</p>
+        <p class="mb-0">Lesson Link:
+          <a href="{{../user.teacher.videoLink}}">{{../user.teacher.videoLink}}</a>
+        </p>
+        {{else}}
+        <p class="mb-0">Teacher's Name: {{this.teacher.user.name}}</p>
+        <p class="mb-0">Lesson Link:
+          <a href="{{this.teacher.videoLink}}">{{this.teacher.videoLink}}</a>
+        </p>
+        {{/if}}
+        <p class="mt-2 mb-0">Lesson Status:
+          <button type="button" class="btn btn-sm btn-secondary" disabled>{{this.status}}</button>
+        </p>
+        <div class="d-flex justify-content-end">
+          {{#if ../user.isTeacher}}
+          {{#ifCond this.status "pending"}}
+          <form action="/users/appointments/{{this.id}}?_method=PUT" method="POST" class="me-2">
+            <button class="btn btn-secondary btn-sm">Confirm</button>
+          </form>
+          {{/ifCond}}
+          {{/if}}
+          <form action="/users/appointments/{{this.id}}?_method=DELETE" method="POST">
+            <button class="btn btn-danger btn-sm">Cancel</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="col-md-6 mb-3">
+      <div class="border p-2">
+        <p class="mb-0">No schedule found.</p>
+      </div>
+    </div>
+    {{/if}}
+  </div>
