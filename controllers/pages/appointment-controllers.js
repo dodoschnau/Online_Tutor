@@ -63,6 +63,28 @@ const appointmentControllers = {
     } catch (error) {
       next(error)
     }
+  },
+  deleteAppointment: async (req, res, next) => {
+    try {
+      const id = req.params.id
+      const user = req.user
+      const appointment = await Appointment.findByPk(id)
+      if (!appointment) throw new Error('Appointment not found.')
+
+      const teacher = await Teacher.findByPk(appointment.teacherId)
+      if (!teacher) throw new Error('Teacher not found.')
+      if (user.isTeacher) {
+        if (appointment.teacherId !== teacher.id) throw new Error('You are not authorized to delete this appointment.')
+      } else {
+        if (appointment.userId !== user.id) throw new Error('You are not authorized to delete this appointment.')
+      }
+
+      await Appointment.destroy({ where: { id } })
+      req.flash('success', 'Appointment deleted successfully.')
+      return res.redirect('back')
+    } catch (error) {
+      next(error)
+    }
   }
 }
 

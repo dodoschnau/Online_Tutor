@@ -1,7 +1,12 @@
+{{> messages}}
+
 <div class="col-md-8">
   <div class="mb-3 d-flex justify-content-between align-items-center">
     <h2>Your All Schedule</h2>
+
+    {{!-- Back Button --}}
     <a href="/users/{{user.id}}" class="btn btn-primary">Back</a>
+
   </div>
   <p>Your pending or confirmed schedule will be shown here.</p>
 
@@ -26,18 +31,8 @@
         <p class="mt-2 mb-0">Lesson Status:
           <button type="button" class="btn btn-sm btn-secondary" disabled>{{this.status}}</button>
         </p>
-        <div class="d-flex justify-content-end">
-          {{#if ../user.isTeacher}}
-          {{#ifCond this.status "pending"}}
-          <form action="/users/appointments/{{this.id}}?_method=PUT" method="POST" class="me-2">
-            <button class="btn btn-secondary btn-sm">Confirm</button>
-          </form>
-          {{/ifCond}}
-          {{/if}}
-          <form action="/users/appointments/{{this.id}}?_method=DELETE" method="POST">
-            <button class="btn btn-danger btn-sm">Cancel</button>
-          </form>
-        </div>
+
+        {{> appointment-button appointment=this user=../user}}
 
       </div>
     </div>

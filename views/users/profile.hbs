@@ -8,10 +8,15 @@
     <div class="col-md-8">
       <div class="mb-3 d-flex justify-content-between align-items-center">
         <h2>New Schedule</h2>
+
+        {{!-- See All Schedule Button --}}
         <a href="/users/{{user.id}}/schedule" class="btn btn-secondary">See All Schedule</a>
+
       </div>
 
       <div class="row mb-4">
+
+        {{!-- Each Appointment --}}
         {{#if appointments}}
         {{#each appointments}}
         <div class="col-md-6 mb-3">
@@ -25,14 +30,13 @@
               <a href="{{this.teacher.videoLink}}">{{this.teacher.videoLink}}</a>
             </p>
             <p class="mb-0">Lesson Status: {{this.status}}</p>
-            <div class="d-flex justify-content-end">
-              <form action="/users/appointments/{{this.id}}?_method=DELETE" method="POST">
-                <button class="btn btn-danger btn-sm">Cancel</button>
-              </form>
-            </div>
+
+            {{> appointment-button appointment=this user=../user}}
+
           </div>
         </div>
         {{/each}}
+
         {{else}}
         <div class="col-md-6 mb-3">
           <div class="border p-2">
@@ -40,6 +44,7 @@
           </div>
         </div>
         {{/if}}
+
       </div>
 
       <!-- Lesson History -->

@@ -8,9 +8,12 @@
     <div class="col-md-8">
       <div class="mb-3 d-flex justify-content-between align-items-center">
         <h2>New Schedule</h2>
+
+        {{!-- See All Schedule Button --}}
         <a href="/users/{{user.id}}/schedule" class="btn btn-secondary">See All Schedule</a>
       </div>
 
+      {{!-- Each Appointment --}}
       <div class="row mb-4">
         {{#if appointments}}
         {{#each appointments}}
@@ -23,16 +26,8 @@
               <a href="{{../user.teacher.videoLink}}">{{../user.teacher.videoLink}}</a>
             </p>
             <p class="mb-0">Lesson Status: {{this.status}}</p>
-            <div class="d-flex justify-content-end">
-              {{#ifCond this.status "pending"}}
-              <form action="/users/appointments/{{this.id}}?_method=PUT" method="POST" class="me-2">
-                <button class="btn btn-secondary btn-sm">Confirm</button>
-              </form>
-              {{/ifCond}}
-              <form action="/users/appointments/{{this.id}}?_method=DELETE" method="POST">
-                <button class="btn btn-danger btn-sm">Cancel</button>
-              </form>
-            </div>
+
+            {{> appointment-button appointment=this user=../user}}
 
           </div>
         </div>
@@ -44,6 +39,7 @@
           </div>
         </div>
         {{/if}}
+
       </div>
 
       <!-- Teaching Style -->
