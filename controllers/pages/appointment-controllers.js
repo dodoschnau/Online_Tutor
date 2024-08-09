@@ -6,8 +6,7 @@ const appointmentControllers = {
     try {
       const user = req.user
       const userId = req.user.id
-      const { teacherId } = req.params
-      const { selectedTime } = req.body
+      const { teacherId, selectedTime } = req.body
 
       if (user.isTeacher) throw new Error('Teacher cannot make appointments.')
 
