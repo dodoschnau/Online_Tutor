@@ -29,7 +29,8 @@
             <p class="mb-0">Lesson Link:
               <a href="{{this.teacher.videoLink}}">{{this.teacher.videoLink}}</a>
             </p>
-            <p class="mb-0">Lesson Status: {{this.status}}</p>
+            
+            {{> lesson-status appointment=this}}
 
             {{> appointment-button appointment=this user=../user}}
 

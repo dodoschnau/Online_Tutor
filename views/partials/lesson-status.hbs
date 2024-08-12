@@ -1,0 +1,8 @@
+<p class="mt-2 mb-0">Lesson Status:
+  {{#ifCond appointment.status "pending"}}
+  <span class="badge bg-warning-subtle text-dark fs-6">Pending</span>
+  {{/ifCond}}
+  {{#ifCond appointment.status "confirmed"}}
+  <span class="badge bg-success-subtle text-dark fs-6">Confirmed</span>
+  {{/ifCond}}
+</p>

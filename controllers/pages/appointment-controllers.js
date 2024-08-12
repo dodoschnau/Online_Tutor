@@ -85,6 +85,24 @@ const appointmentControllers = {
     } catch (error) {
       next(error)
     }
+  },
+  confirmAppointment: async (req, res, next) => {
+    try {
+      const id = req.params.id
+      const appointment = await Appointment.findByPk(id)
+      if (!appointment) throw new Error('Appointment not found.')
+
+      const teacher = await Teacher.findByPk(appointment.teacherId)
+      if (!teacher) throw new Error('Teacher not found.')
+
+      if (appointment.teacherId !== teacher.id) throw new Error('You are not authorized to confirm this appointment.')
+
+      await Appointment.update({ status: 'confirmed' }, { where: { id } })
+      req.flash('success', 'Appointment confirmed successfully.')
+      return res.redirect('back')
+    } catch (error) {
+      next(error)
+    }
   }
 }
 

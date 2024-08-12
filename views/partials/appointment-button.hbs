@@ -4,15 +4,15 @@
   {{!-- {{#if ../user.isTeacher }} --}}
   {{#if user.isTeacher }}
   {{#ifCond appointment.status "pending"}}
-  <form action="/users/appointment/{{appointment.id}}?_method=PUT" method="POST" class="me-2">
-    <button class="btn btn-secondary btn-sm">Confirm</button>
+  <form action="/users/appointment/{{../appointment.id}}?_method=PUT" method="POST" class="me-2">
+    <button type="submit" class="btn btn-secondary btn-sm">Confirm</button>
   </form>
   {{/ifCond}}
   {{/if}}
 
   {{!-- Cancel Button: For both Teacher and Student --}}
   <form action="/users/appointment/{{appointment.id}}?_method=DELETE" method="POST">
-    <button class="btn btn-danger btn-sm">Cancel</button>
+    <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
   </form>
 
 </div>

@@ -6,6 +6,7 @@ const appointmentControllers = require('../../controllers/pages/appointment-cont
 const upload = require('../../middlewares/multer')
 
 router.delete('/appointment/:id', appointmentControllers.deleteAppointment)
+router.put('/appointment/:id', appointmentControllers.confirmAppointment)
 router.post('/appointment', appointmentControllers.postAppointment)
 
 router.get('/applyTeacher', userControllers.getApplyTeacher)
