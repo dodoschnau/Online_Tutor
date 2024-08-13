@@ -2,29 +2,20 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('Appointments', {
+    await queryInterface.createTable('Reviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      date: {
-        type: Sequelize.DATEONLY,
-        allowNull: false
-      },
-      start_time: {
-        type: Sequelize.TIME,
-        allowNull: false
-      },
-      end_time: {
-        type: Sequelize.TIME,
-        allowNull: false
-      },
-      status: {
+      message: {
         type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: 'pending'
+        allowNull: false
+      },
+      score: {
+        type: Sequelize.DECIMAL(2, 1),
+        allowNull: false
       },
       user_id: {
         type: Sequelize.INTEGER,
@@ -57,6 +48,6 @@ module.exports = {
     })
   },
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('Appointments')
+    await queryInterface.dropTable('Reviews')
   }
 }
