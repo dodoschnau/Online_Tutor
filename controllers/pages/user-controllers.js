@@ -21,7 +21,10 @@ const userControllers = {
 
       if (user.isTeacher) {
         const appointments = await Appointment.findAll({
-          where: { teacherId: user.teacher.id },
+          where: {
+            teacherId: user.teacher.id,
+            status: ['pending', 'confirmed']
+          },
           include: [{
             model: User,
             as: 'student',
@@ -35,7 +38,10 @@ const userControllers = {
         return res.render('users/teacher-profile', { user, appointments })
       } else {
         const appointments = await Appointment.findAll({
-          where: { userId },
+          where: {
+            userId,
+            status: ['pending', 'confirmed']
+          },
           include: [{
             model: Teacher,
             as: 'teacher',

@@ -17,10 +17,11 @@
       <div class="row mb-4">
 
         {{!-- Each Appointment --}}
+        <p>Here are the latest 4 appointments with status of pending or confirmed.</p>
         {{#if appointments}}
         {{#each appointments}}
         <div class="col-md-6 mb-3">
-          <div class="border p-2">
+          <div class="border p-2 h-100">
             <p class="mb-0">Date: {{this.date}}</p>
             <p class="mb-0">Times: {{this.startTime}} - {{this.endTime}}</p>
             <p class="mb-0">Teacher's Name:

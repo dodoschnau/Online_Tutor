@@ -86,7 +86,7 @@ const appointmentControllers = {
       next(error)
     }
   },
-  confirmAppointment: async (req, res, next) => {
+  putAppointmentStatus: async (req, res, next) => {
     try {
       const id = req.params.id
       const appointment = await Appointment.findByPk(id)
@@ -97,8 +97,14 @@ const appointmentControllers = {
 
       if (appointment.teacherId !== teacher.id) throw new Error('You are not authorized to confirm this appointment.')
 
-      await Appointment.update({ status: 'confirmed' }, { where: { id } })
-      req.flash('success', 'Appointment confirmed successfully.')
+      if (appointment.status === 'pending') {
+        await Appointment.update({ status: 'confirmed' }, { where: { id } })
+        req.flash('success', 'Appointment confirmed successfully.')
+      } else if (appointment.status === 'confirmed') {
+        await Appointment.update({ status: 'finished' }, { where: { id } })
+        req.flash('success', 'Appointment finished successfully.')
+      }
+
       return res.redirect('back')
     } catch (error) {
       next(error)

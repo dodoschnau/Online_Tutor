@@ -5,4 +5,7 @@
   {{#ifCond appointment.status "confirmed"}}
   <span class="badge bg-success-subtle text-dark fs-6">Confirmed</span>
   {{/ifCond}}
+  {{#ifCond appointment.status "finished"}}
+  <span class="badge bg-primary-subtle text-dark fs-6">Finished</span>
+  {{/ifCond}}
 </p>

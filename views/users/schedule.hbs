@@ -8,13 +8,13 @@
     <a href="/users/{{user.id}}" class="btn btn-primary">Back</a>
 
   </div>
-  <p>Your pending or confirmed schedule will be shown here.</p>
+  <p>Your all schedule will be shown here.</p>
 
   <div class="row mb-4">
     {{#if appointments}}
     {{#each appointments}}
     <div class="col-md-6 mb-3">
-      <div class="border p-2">
+      <div class="border p-2 h-100">
         <p class="mb-0">Date: {{this.date}}</p>
         <p class="mb-0">Times: {{this.startTime}} - {{this.endTime}}</p>
         {{#if ../user.isTeacher}}
