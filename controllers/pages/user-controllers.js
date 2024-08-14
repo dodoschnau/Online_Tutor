@@ -1,6 +1,7 @@
-const { User, Teacher, Appointment } = require('../../models')
+const { User, Teacher } = require('../../models')
 const countries = require('world-countries')
 const { localFileHandler } = require('../../helpers/file-helpers')
+const { getAppointments } = require('../../helpers/appointments-helpers')
 
 const userControllers = {
   getProfile: async (req, res, next) => {
@@ -19,76 +20,28 @@ const userControllers = {
       if (!user) throw new Error('User not found.')
       if (parseInt(paramsId, 10) !== userId) throw new Error('You are not authorized to view this profile.')
 
-      let pendingConfirmedAppointments, finishedAppointments
+      const isTeacher = user.isTeacher
+      const where = isTeacher ? { teacherId: user.teacher.id } : { userId }
+      const include = isTeacher
+        ? [{ model: User, as: 'student', attributes: ['name', 'avatar'] }]
+        : [{
+            model: Teacher,
+            as: 'teacher',
+            include: [{ model: User, as: 'user', attributes: ['name', 'avatar'] }]
+          }]
 
-      if (user.isTeacher) {
-        [pendingConfirmedAppointments, finishedAppointments] = await Promise.all([
-          Appointment.findAll({
-            where: {
-              teacherId: user.teacher.id,
-              status: ['pending', 'confirmed']
-            },
-            include: [{
-              model: User,
-              as: 'student',
-              attributes: ['name', 'avatar']
-            }],
-            order: [['createdAt', 'DESC']],
-            limit: 4,
-            raw: true,
-            nest: true
-          }),
-          Appointment.findAll({
-            where: {
-              teacherId: user.teacher.id,
-              status: ['finished']
-            },
-            include: [{
-              model: User,
-              as: 'student',
-              attributes: ['name', 'avatar']
-            }],
-            order: [['createdAt', 'DESC']],
-            limit: 4,
-            raw: true,
-            nest: true
-          })
-        ])
-      } else {
-        [pendingConfirmedAppointments, finishedAppointments] = await Promise.all([
-          Appointment.findAll({
-            where: {
-              userId,
-              status: ['pending', 'confirmed']
-            },
-            include: [{
-              model: Teacher,
-              as: 'teacher',
-              include: [{ model: User, as: 'user', attributes: ['name', 'avatar'] }]
-            }],
-            order: [['createdAt', 'DESC']],
-            limit: 4,
-            raw: true,
-            nest: true
-          }),
-          Appointment.findAll({
-            where: {
-              userId,
-              status: ['finished']
-            },
-            include: [{
-              model: Teacher,
-              as: 'teacher',
-              include: [{ model: User, as: 'user', attributes: ['name', 'avatar'] }]
-            }],
-            order: [['createdAt', 'DESC']],
-            limit: 4,
-            raw: true,
-            nest: true
-          })
-        ])
-      }
-      return res.render(user.isTeacher ? 'users/teacher-profile' : 'users/profile', { user, pendingConfirmedAppointments, finishedAppointments })
+      const [pendingConfirmedAppointments, finishedAppointments] = await Promise.all([
+        getAppointments({ ...where, status: ['pending', 'confirmed'] }, include, [['createdAt', 'DESC']], 4),
+        getAppointments({ ...where, status: 'finished' }, include, [['createdAt', 'DESC']], 4)
+      ])
+
+      const viewName = isTeacher ? 'users/teacher-profile' : 'users/profile'
+
+      return res.render(viewName, {
+        user,
+        pendingConfirmedAppointments,
+        finishedAppointments
+      })
     } catch (error) {
       next(error)
     }
@@ -220,33 +173,19 @@ const userControllers = {
       if (!user) throw new Error('User not found.')
       if (parseInt(paramsId, 10) !== userId) throw new Error('You are not authorized to view this profile.')
 
-      if (user.isTeacher) {
-        const appointments = await Appointment.findAll({
-          where: { teacherId: user.teacher.id },
-          include: [{
-            model: User,
-            as: 'student',
-            attributes: ['name']
-          }],
-          order: [['date', 'ASC']],
-          raw: true,
-          nest: true
-        })
-        return res.render('users/schedule', { user, appointments })
-      } else {
-        const appointments = await Appointment.findAll({
-          where: { userId },
-          include: [{
+      const isTeacher = user.isTeacher
+      const where = isTeacher ? { teacherId: user.teacher.id } : { userId }
+      const include = isTeacher
+        ? [{ model: User, as: 'student', attributes: ['name'] }]
+        : [{
             model: Teacher,
             as: 'teacher',
             include: [{ model: User, as: 'user', attributes: ['name'] }]
-          }],
-          order: [['date', 'ASC']],
-          raw: true,
-          nest: true
-        })
-        return res.render('users/schedule', { user, appointments })
-      }
+          }]
+
+      const appointments = await getAppointments(where, include, [['date', 'ASC']])
+
+      return res.render('users/schedule', { user, appointments })
     } catch (error) {
       next(error)
     }
