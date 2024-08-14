@@ -11,13 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate (models) {
       // define association here
-      Review.belongsTo(models.User, {
-        foreignKey: 'userId',
-        as: 'student'
-      })
-      Review.belongsTo(models.Teacher, {
-        foreignKey: 'teacherId',
-        as: 'teacher'
+      Review.belongsTo(models.Appointment, {
+        foreignKey: 'appointmentId',
+        as: 'appointment'
       })
     }
   }
@@ -30,11 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(2, 1),
       allowNull: false
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    teacherId: {
+    appointmentId: {
       type: DataTypes.INTEGER,
       allowNull: false
     }

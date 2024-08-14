@@ -17,21 +17,11 @@ module.exports = {
         type: Sequelize.DECIMAL(2, 1),
         allowNull: false
       },
-      user_id: {
+      appointment_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Users',
-          key: 'id'
-        },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE'
-      },
-      teacher_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Teachers',
+          model: 'Appointments',
           key: 'id'
         },
         onDelete: 'CASCADE',
