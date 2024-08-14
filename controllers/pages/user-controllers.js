@@ -19,41 +19,76 @@ const userControllers = {
       if (!user) throw new Error('User not found.')
       if (parseInt(paramsId, 10) !== userId) throw new Error('You are not authorized to view this profile.')
 
+      let pendingConfirmedAppointments, finishedAppointments
+
       if (user.isTeacher) {
-        const appointments = await Appointment.findAll({
-          where: {
-            teacherId: user.teacher.id,
-            status: ['pending', 'confirmed']
-          },
-          include: [{
-            model: User,
-            as: 'student',
-            attributes: ['name']
-          }],
-          order: [['createdAt', 'DESC']],
-          limit: 4,
-          raw: true,
-          nest: true
-        })
-        return res.render('users/teacher-profile', { user, appointments })
+        [pendingConfirmedAppointments, finishedAppointments] = await Promise.all([
+          Appointment.findAll({
+            where: {
+              teacherId: user.teacher.id,
+              status: ['pending', 'confirmed']
+            },
+            include: [{
+              model: User,
+              as: 'student',
+              attributes: ['name', 'avatar']
+            }],
+            order: [['createdAt', 'DESC']],
+            limit: 4,
+            raw: true,
+            nest: true
+          }),
+          Appointment.findAll({
+            where: {
+              teacherId: user.teacher.id,
+              status: ['finished']
+            },
+            include: [{
+              model: User,
+              as: 'student',
+              attributes: ['name', 'avatar']
+            }],
+            order: [['createdAt', 'DESC']],
+            limit: 4,
+            raw: true,
+            nest: true
+          })
+        ])
       } else {
-        const appointments = await Appointment.findAll({
-          where: {
-            userId,
-            status: ['pending', 'confirmed']
-          },
-          include: [{
-            model: Teacher,
-            as: 'teacher',
-            include: [{ model: User, as: 'user', attributes: ['name'] }]
-          }],
-          order: [['createdAt', 'DESC']],
-          limit: 4,
-          raw: true,
-          nest: true
-        })
-        return res.render('users/profile', { user, appointments })
+        [pendingConfirmedAppointments, finishedAppointments] = await Promise.all([
+          Appointment.findAll({
+            where: {
+              userId,
+              status: ['pending', 'confirmed']
+            },
+            include: [{
+              model: Teacher,
+              as: 'teacher',
+              include: [{ model: User, as: 'user', attributes: ['name', 'avatar'] }]
+            }],
+            order: [['createdAt', 'DESC']],
+            limit: 4,
+            raw: true,
+            nest: true
+          }),
+          Appointment.findAll({
+            where: {
+              userId,
+              status: ['finished']
+            },
+            include: [{
+              model: Teacher,
+              as: 'teacher',
+              include: [{ model: User, as: 'user', attributes: ['name', 'avatar'] }]
+            }],
+            order: [['createdAt', 'DESC']],
+            limit: 4,
+            raw: true,
+            nest: true
+          })
+        ])
       }
+      return res.render(user.isTeacher ? 'users/teacher-profile' : 'users/profile', { user, pendingConfirmedAppointments, finishedAppointments })
     } catch (error) {
       next(error)
     }

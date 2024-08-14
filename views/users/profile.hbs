@@ -18,8 +18,8 @@
 
         {{!-- Each Appointment --}}
         <p>Here are the latest 4 appointments with status of pending or confirmed.</p>
-        {{#if appointments}}
-        {{#each appointments}}
+        {{#if pendingConfirmedAppointments}}
+        {{#each pendingConfirmedAppointments}}
         <div class="col-md-6 mb-3">
           <div class="border p-2 h-100">
             <p class="mb-0">Date: {{this.date}}</p>
@@ -30,7 +30,7 @@
             <p class="mb-0">Lesson Link:
               <a href="{{this.teacher.videoLink}}">{{this.teacher.videoLink}}</a>
             </p>
-            
+
             {{> lesson-status appointment=this}}
 
             {{> appointment-button appointment=this user=../user}}
@@ -51,31 +51,24 @@
 
       <!-- Lesson History -->
       <h2>Lesson History</h2>
+      <p>If teacher has finished the lesson, it will be listed here.</p>
       <div class="row mb-4">
+        {{#if finishedAppointments}}
+        {{#each finishedAppointments}}
         <div class="col-md-6">
           <div class="border p-2 d-flex justify-content-between align-items-center mb-2">
-            <img src="{{user.avatar}}" alt="avatar" class="rounded-circle" width="50" height="50">
-            <span>Teacher's Name</span>
-            <button class="btn btn-primary btn-sm">Score</button>
-          </div>
-          <div class="border p-2 d-flex justify-content-between align-items-center">
-            <img src="{{user.avatar}}" alt="avatar" class="rounded-circle" width="50" height="50">
-            <span>Teacher's Name</span>
+            <img src="{{this.teacher.user.avatar}}" alt="avatar" class="rounded-circle" width="50" height="50">
+            <div>
+              <p class="mb-0">Teacher's name: {{this.teacher.user.name}}</p>
+              <p class="mb-0">Date: {{this.date}}</p>
+              <p class="mb-0">Times: {{this.startTime}} - {{this.endTime}}</p>
+            </div>
+
             <button class="btn btn-primary btn-sm">Score</button>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="border p-2 d-flex justify-content-between align-items-center mb-2">
-            <img src="{{user.avatar}}" alt="avatar" class="rounded-circle" width="50" height="50">
-            <span>Teacher's Name</span>
-            <button class="btn btn-primary btn-sm">Score</button>
-          </div>
-          <div class="border p-2 d-flex justify-content-between align-items-center">
-            <img src="{{user.avatar}}" alt="avatar" class="rounded-circle" width="50" height="50">
-            <span>Teacher's Name</span>
-            <button class="btn btn-primary btn-sm">Score</button>
-          </div>
-        </div>
+        {{/each}}
+        {{/if}}
       </div>
 
       <!-- Study Hours Ranking -->
