@@ -1,4 +1,4 @@
-const { User, Teacher } = require('../../models')
+const { User, Teacher, Review } = require('../../models')
 const countries = require('world-countries')
 const { localFileHandler } = require('../../helpers/file-helpers')
 const { getAppointments } = require('../../helpers/appointments-helpers')
@@ -23,16 +23,22 @@ const userControllers = {
       const isTeacher = user.isTeacher
       const where = isTeacher ? { teacherId: user.teacher.id } : { userId }
       const include = isTeacher
-        ? [{ model: User, as: 'student', attributes: ['name', 'avatar'] }]
-        : [{
-            model: Teacher,
-            as: 'teacher',
-            include: [{ model: User, as: 'user', attributes: ['name', 'avatar'] }]
-          }]
+        ? [
+            { model: User, as: 'student', attributes: ['name', 'avatar'] },
+            { model: Review, as: 'review', attributes: ['score'] }
+          ]
+        : [
+            {
+              model: Teacher,
+              as: 'teacher',
+              include: [{ model: User, as: 'user', attributes: ['name', 'avatar'] }]
+            },
+            { model: Review, as: 'review', attributes: ['score'] }
+          ]
 
       const [pendingConfirmedAppointments, finishedAppointments] = await Promise.all([
         getAppointments({ ...where, status: ['pending', 'confirmed'] }, include, [['createdAt', 'DESC']], 4),
-        getAppointments({ ...where, status: 'finished' }, include, [['createdAt', 'DESC']], 4)
+        getAppointments({ ...where, status: 'finished' }, include, [['updatedAt', 'DESC']], 4)
       ])
 
       const viewName = isTeacher ? 'users/teacher-profile' : 'users/profile'

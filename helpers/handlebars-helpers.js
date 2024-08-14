@@ -7,5 +7,8 @@ module.exports = {
   },
   ifOrCond: (a, b, c, options) => {
     return (a === b || a === c) ? options.fn(this) : options.inverse(this)
+  },
+  ifReviewExists: (review, options) => {
+    return (review && review.score != null) ? options.fn(this) : options.inverse(this)
   }
 }
