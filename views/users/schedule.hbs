@@ -24,17 +24,48 @@
         </p>
         {{else}}
         <p class="mb-0">Teacher's Name: {{this.teacher.user.name}}</p>
+        {{#ifOrCond this.status 'pending' 'confirmed'}}
         <p class="mb-0">Lesson Link:
-          <a href="{{this.teacher.videoLink}}">{{this.teacher.videoLink}}</a>
+          <a href="{{../this.teacher.videoLink}}">{{../this.teacher.videoLink}}</a>
         </p>
+        {{/ifOrCond}}
+
         {{/if}}
 
         {{> lesson-status appointment=this}}
 
         {{> appointment-button appointment=this user=../user}}
 
+        {{!-- Review Area --}}
+        {{#ifCond this.status 'finished'}}
+
+        {{#ifReviewExists ../this.review}}
+        <hr>
+        <p class="mb-0">Review:</p>
+        <p>{{../this.review.message}}</p>
+        <div class="float-end">
+          <p class="mb-2"><i class="fas fa-star text-warning"></i> {{../this.review.score}}</p>
+        </div>
+        {{else}} {{!-- If there is no review --}}
+        {{#ifBooleanCond ../../user.isTeacher false}}
+        <hr>
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-outline-primary btn-sm mb-2 mt-2" data-bs-toggle="modal"
+            data-bs-target="#reviewModal-{{../this.id}}">Score</button>
+        </div>
+        {{else}} {{!-- If the user is a teacher --}}
+        <hr>
+        <p>Waiting for the student to review.</p>
+        {{/ifBooleanCond}}
+        {{/ifReviewExists}}
+        {{/ifCond}}
+
       </div>
     </div>
+
+    <!-- Review Modal -->
+    {{> review-modal appointment=this}}
+
     {{/each}}
     {{else}}
     <div class="col-md-6 mb-3">

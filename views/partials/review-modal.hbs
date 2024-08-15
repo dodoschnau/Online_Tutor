@@ -1,0 +1,47 @@
+<!-- Review Modal -->
+<div class="modal" id="reviewModal-{{appointment.id}}" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border border-5 border-primary-subtle">
+      <div class="modal-header border-bottom border-5 border-primary-subtle">
+        <h4 class="modal-title">Share Your Experience of the Lesson</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body fs-4">
+        <div>
+          <p class="mb-0">Teacher's name: {{appointment.teacher.user.name}}</p>
+          <p class="mb-0">Date: {{appointment.date}}</p>
+          <p class="mb-0">Times: {{appointment.startTime}} - {{appointment.endTime}}</p>
+        </div>
+      </div>
+      <form action="/users/review" method="POST">
+        <input type="hidden" name="appointmentId" value="{{appointment.id}}">
+
+        <div class="p-3 mb-3">
+          <div class="ts-rating is-yellow is-input">
+            <p>Score :</p>
+            <label for="star1-{{appointment.id}}" title="1 star"></label>
+            <input class="star" type="radio" name="score" id="star1-{{appointment.id}}" value="1" />
+            <label for="star2-{{appointment.id}}" title="2 stars"></label>
+            <input class="star" type="radio" name="score" id="star2-{{appointment.id}}" value="2" />
+            <label for="star3-{{appointment.id}}" title="3 stars"></label>
+            <input class="star" type="radio" name="score" id="star3-{{appointment.id}}" value="3" />
+            <label for="star4-{{appointment.id}}" title="4 stars"></label>
+            <input class="star" type="radio" name="score" id="star4-{{appointment.id}}" value="4" />
+            <label for="star5-{{appointment.id}}" title="5 stars"></label>
+            <input class="star" type="radio" name="score" id="star5-{{appointment.id}}" value="5" />
+          </div>
+
+          <div class="mb-3">
+            <label for="message" class="form-label">Message:</label>
+            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+          </div>
+        </div>
+
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

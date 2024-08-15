@@ -182,12 +182,14 @@ const userControllers = {
       const isTeacher = user.isTeacher
       const where = isTeacher ? { teacherId: user.teacher.id } : { userId }
       const include = isTeacher
-        ? [{ model: User, as: 'student', attributes: ['name'] }]
+        ? [{ model: User, as: 'student', attributes: ['name'] },
+            { model: Review, as: 'review', attributes: ['score', 'message'] }]
         : [{
             model: Teacher,
             as: 'teacher',
             include: [{ model: User, as: 'user', attributes: ['name'] }]
-          }]
+          },
+          { model: Review, as: 'review', attributes: ['score', 'message'] }]
 
       const appointments = await getAppointments(where, include, [['date', 'ASC']])
 
