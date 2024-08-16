@@ -1,6 +1,6 @@
 {{> messages}}
 
-<div class="container mt-5">
+<div class="container m-5">
   <div class="row">
     {{!-- User Information --}}
     {{> profile-left-column}}
@@ -86,8 +86,10 @@
 
       <!-- Study Hours Ranking -->
       <h2>My Study Hours Ranking</h2>
+      <p>When you finished the lesson, your study hours will be calculated and ranked.</p>
       <div class="border p-2">
-        <p class="mb-0">Ranking:</p>
+        <p class="mb-0">My total study hours: {{currentUserTotalDuration}}</p>
+        <p class="mb-0">Ranking : {{currentUserRank}}</p>
       </div>
     </div>
   </div>

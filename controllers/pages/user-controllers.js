@@ -1,4 +1,6 @@
-const { User, Teacher, Review } = require('../../models')
+const { User, Teacher, Review, Appointment } = require('../../models')
+const { sequelize } = require('../../models')
+const { fn, col, literal } = require('sequelize')
 const countries = require('world-countries')
 const { localFileHandler } = require('../../helpers/file-helpers')
 const { getAppointments } = require('../../helpers/appointments-helpers')
@@ -41,12 +43,43 @@ const userControllers = {
         getAppointments({ ...where, status: 'finished' }, include, [['updatedAt', 'DESC']], 4)
       ])
 
+      let currentUserTotalDuration = null
+      let currentUserRank = null
+
+      if (!user.isTeacher) {
+        // This is an ARRAY of OBJECTS, and each OBJECT has 'userId' and 'totalDuration'
+        const allUsersDurations = await Appointment.findAll({
+          attributes: [
+            'userId',
+            [fn('SUM', fn('TIMESTAMPDIFF', literal('MINUTE'), col('start_time'), col('end_time'))), 'totalMinutes']
+          ],
+          where: { status: 'finished' },
+          group: ['userId'],
+          order: [[sequelize.literal('totalMinutes'), 'DESC']],
+          raw: true
+        })
+
+        // Transform minutes to hours and format to one decimal place
+        const formattedDurations = allUsersDurations.map(user => ({
+          userId: user.userId,
+          totalDuration: (user.totalMinutes / 60).toFixed(1)
+        }))
+
+        const userDuration = formattedDurations.find(user => user.userId === userId)
+
+        // Calculate the rank of the current user
+        currentUserTotalDuration = userDuration ? userDuration.totalDuration : '0.0'
+        currentUserRank = formattedDurations.findIndex(user => user.userId === userId) + 1
+      }
+
       const viewName = isTeacher ? 'users/teacher-profile' : 'users/profile'
 
       return res.render(viewName, {
         user,
         pendingConfirmedAppointments,
-        finishedAppointments
+        finishedAppointments,
+        currentUserTotalDuration,
+        currentUserRank
       })
     } catch (error) {
       next(error)
