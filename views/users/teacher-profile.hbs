@@ -26,7 +26,7 @@
             <p class="mb-0">Lesson Link:
               <a href="{{../user.teacher.videoLink}}">{{../user.teacher.videoLink}}</a>
             </p>
-            
+
             {{> lesson-status appointment=this}}
 
             {{> appointment-button appointment=this user=../user}}
@@ -50,18 +50,22 @@
 
       <!-- Recent Reviewed -->
       <h2 class="mb-3">Recent Reviewed</h2>
+      {{#each appointmentsWithReviews}}
+      {{#if this.review.score}}
       <div class="mb-3">
-        <span class="badge bg-warning text-dark me-2">4.8</span>
-        <div class="border p-3">
-          <p class="mb-0">Message</p>
+        <span class="badge bg-warning text-dark me-2">{{this.review.score}}</span>
+        <span>{{this.date}} {{this.startTime}}-{{this.endTime}}</span>
+        <div class="border p-3 d-flex">
+          <img src="{{this.student.avatar}}" alt="avatar" class="rounded-circle me-4" width="50" height="50">
+          <div>
+            <p>Student's Name: {{this.student.name}}</p>
+            <p class="mb-0">Message: {{this.review.message}}</p>
+          </div>
         </div>
       </div>
-      <div class="mb-3">
-        <span class="badge bg-warning text-dark me-2">4.8</span>
-        <div class="border p-3">
-          <p class="mb-0">Message</p>
-        </div>
-      </div>
+      {{/if}}
+      {{/each}}
+
     </div>
   </div>
 </div>

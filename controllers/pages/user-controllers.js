@@ -1,6 +1,6 @@
 const { User, Teacher, Review, Appointment } = require('../../models')
 const { sequelize } = require('../../models')
-const { fn, col, literal } = require('sequelize')
+const { fn, col, literal, Op } = require('sequelize')
 const countries = require('world-countries')
 const { localFileHandler } = require('../../helpers/file-helpers')
 const { getAppointments } = require('../../helpers/appointments-helpers')
@@ -27,7 +27,7 @@ const userControllers = {
       const include = isTeacher
         ? [
             { model: User, as: 'student', attributes: ['name', 'avatar'] },
-            { model: Review, as: 'review', attributes: ['score'] }
+            { model: Review, as: 'review', attributes: ['score', 'message'] }
           ]
         : [
             {
@@ -38,9 +38,16 @@ const userControllers = {
             { model: Review, as: 'review', attributes: ['score'] }
           ]
 
-      const [pendingConfirmedAppointments, finishedAppointments] = await Promise.all([
+      const [pendingConfirmedAppointments, finishedAppointments, appointmentsWithReviews] = await Promise.all([
         getAppointments({ ...where, status: ['pending', 'confirmed'] }, include, [['createdAt', 'DESC']], 4),
-        getAppointments({ ...where, status: 'finished' }, include, [['updatedAt', 'DESC']], 4)
+        getAppointments({ ...where, status: 'finished' }, include, [['updatedAt', 'DESC']], 4),
+        // For teacher's recent reviews
+        getAppointments({
+          ...where,
+          status: 'finished',
+          // make sure the review is not null
+          '$review.id$': { [Op.ne]: null }
+        }, include, [['updatedAt', 'DESC']], 4)
       ])
 
       let currentUserTotalDuration = null
@@ -78,6 +85,7 @@ const userControllers = {
         user,
         pendingConfirmedAppointments,
         finishedAppointments,
+        appointmentsWithReviews,
         currentUserTotalDuration,
         currentUserRank
       })
