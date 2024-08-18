@@ -6,10 +6,17 @@
   </p>
 
   {{#if user.isTeacher}}
+  {{#if averageScore}}
   <div class="d-flex align-items-center">
     <i class="fa-solid fa-heart me-2" style="color: #ff4d4d;"></i>
-    <spam>4.5</span>
+    <spam>{{averageScore}}</span>
   </div>
+  {{else}}
+  <div class="d-flex align-items-center">
+    <i class="fa-solid fa-heart me-2" style="color: #ff4d4d;"></i>
+    <span>There is no score yet.</span>
+  </div>
+  {{/if}}
   {{/if}}
 
   <h5 class="mt-3">About Me</h5>

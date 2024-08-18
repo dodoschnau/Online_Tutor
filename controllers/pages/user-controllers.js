@@ -79,6 +79,25 @@ const userControllers = {
         currentUserRank = formattedDurations.findIndex(user => user.userId === userId) + 1
       }
 
+      let averageScore = null
+      if (user.isTeacher) {
+        // Get the average score of the teacher's reviews
+        const teacherReviews = await Review.findAll({
+          attributes: [
+            [fn('AVG', col('score')), 'averageScore']
+          ],
+          include: [{
+            model: Appointment,
+            as: 'appointment',
+            attributes: [],
+            where: { teacherId: user.teacher.id }
+          }],
+          raw: true
+        })
+
+        averageScore = teacherReviews[0].averageScore ? Number(teacherReviews[0].averageScore).toFixed(1) : null
+      }
+
       const viewName = isTeacher ? 'users/teacher-profile' : 'users/profile'
 
       return res.render(viewName, {
@@ -87,7 +106,8 @@ const userControllers = {
         finishedAppointments,
         appointmentsWithReviews,
         currentUserTotalDuration,
-        currentUserRank
+        currentUserRank,
+        averageScore
       })
     } catch (error) {
       next(error)
