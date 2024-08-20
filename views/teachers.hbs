@@ -1,20 +1,21 @@
 <div class="container-fluid">
   <div class="row mt-3">
-    <div class="col-md-9">
 
-      {{> messages}}
+    {{> messages}}
 
-      <!-- Search Bar -->
-      <form action="/teachers" method="GET" class="d-flex col-9">
-        <div class="input-group row ms-4 mb-4">
-          <input type="text" name="keyword" class="form-control col-auto"
-            placeholder="Search Teacher's Name or Nation here..." aria-label="Searching Teacher..." value="{{keyword}}"
-            aria-describedby="search-button">
-          <div class="input-group-append col-auto">
-            <button class="btn btn-major" type="submit" id="search-button"><i class="fas fa-search"></i></button>
-          </div>
+    <!-- Search Bar -->
+    <form action="/teachers" method="GET" class="d-flex col-9">
+      <div class="input-group row ms-4 mb-4">
+        <input type="text" name="keyword" class="form-control col-auto"
+          placeholder="Search Teacher's Name or Nation here..." aria-label="Searching Teacher..." value="{{keyword}}"
+          aria-describedby="search-button">
+        <div class="input-group-append col-auto">
+          <button class="btn btn-major" type="submit" id="search-button"><i class="fas fa-search"></i></button>
         </div>
-      </form>
+      </div>
+    </form>
+
+    <div class="col-md-9">
 
       <!-- Teacher cards area -->
       {{#if teachers}}
@@ -22,20 +23,20 @@
         {{#each teachers}}
         <div class="col-md-4 mb-4">
           <a href="/teachers/{{this.teacher.id}}" class="card border-primary h-100 d-flex">
-          <div class="card border-primary h-100 d-flex">
-            <div class="d-flex align-items-center p-3">
-              <div>
-                <img src="{{this.avatar}}" class="rounded-circle" alt="Teacher image" width="80" height="80">
+            <div class="card border-primary h-100 d-flex">
+              <div class="d-flex align-items-center p-3">
+                <div>
+                  <img src="{{this.avatar}}" class="rounded-circle" alt="Teacher image" width="80" height="80">
+                </div>
+                <div class="ms-3" style="min-width: 0;"> {{!-- 使父元素中的子元素不會超過父元素 --}}
+                  <h5 class="card-title mb-1 text-truncate">{{this.name}}</h5> {{!-- 讓文本在超出容器寬度時出現省略號（...） --}}
+                  <p class="card-text mb-0 text-truncate">{{this.nation}}</p>
+                </div>
               </div>
-              <div class="ms-3" style="min-width: 0;"> {{!-- 使父元素中的子元素不會超過父元素 --}}
-                <h5 class="card-title mb-1 text-truncate">{{this.name}}</h5> {{!-- 讓文本在超出容器寬度時出現省略號（...） --}}
-                <p class="card-text mb-0 text-truncate">{{this.nation}}</p>
+              <div class="card-body d-flex flex-column">
+                <p class="card-text">{{this.teacher.lessonDescription}}</p>
               </div>
             </div>
-            <div class="card-body d-flex flex-column">
-              <p class="card-text">{{this.teacher.lessonDescription}}</p>
-            </div>
-          </div>
           </a>
         </div>
         {{/each}}
@@ -48,6 +49,28 @@
       </div>
       {{/if}}
     </div>
+
+    <!-- Right side ranking -->
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-header">
+          Learning Hours Ranking
+        </div>
+        <ul class="list-group list-group-flush">
+          <!-- list -->
+          {{#each formattedTopStudents}}
+          <li class="list-group-item d-flex">
+            <img src="{{this.student.avatar}}" class="rounded-circle me-4" alt="User image" width="50" height="50">
+            <div class="d-flex flex-column">
+              <span>No.{{this.rank}}</span>
+              <span>{{this.student.name}} ({{this.totalHours}} hr)</span>
+            </div>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+
   </div>
 </div>
 

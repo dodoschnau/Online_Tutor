@@ -1,4 +1,5 @@
-const { Op } = require('sequelize')
+const { sequelize } = require('../../models')
+const { Op, fn, col, literal } = require('sequelize')
 const { User, Teacher, TeacherAvailability, Appointment } = require('../../models')
 const { getOffset, getPagination } = require('../../helpers/pagination-helper')
 const { processAvailabilities } = require('../../helpers/availability-student-side-helpers')
@@ -21,24 +22,52 @@ const teacherControllers = {
           }
         : {}
 
-      const { count, rows } = await User.findAndCountAll({
-        where,
-        include: [{
-          model: Teacher,
-          as: 'teacher',
-          required: true // 只返回有包含 Teacher 的 User
-        }],
-        offset,
-        limit,
-        raw: true,
-        nest: true
-      })
+      const [{ count, rows }, topStudents] = await Promise.all([
+        User.findAndCountAll({
+          where,
+          include: [{
+            model: Teacher,
+            as: 'teacher',
+            required: true // 只返回有包含 Teacher 的 User
+          }],
+          offset,
+          limit,
+          raw: true,
+          nest: true
+        }),
+        Appointment.findAll({
+          attributes: [
+            'userId',
+            [fn('SUM', fn('TIMESTAMPDIFF', literal('MINUTE'), col('start_time'), col('end_time'))), 'totalMinutes']
+          ],
+          include: [{
+            model: User,
+            as: 'student',
+            attributes: ['name', 'avatar']
+          }],
+          where: { status: 'finished' },
+          group: ['userId'],
+          order: [[sequelize.literal('totalMinutes'), 'DESC']],
+          limit: 10,
+          nest: true,
+          raw: true
+        })
+      ])
+
+      // Transform totalMinutes to hours and round to one decimal place
+      const formattedTopStudents = topStudents.map((student, index) => ({
+        ...student,
+        rank: index + 1,
+        totalHours: (student.totalMinutes / 60).toFixed(1)
+      }))
+
       const pagination = getPagination(count, page, limit)
 
       return res.render('teachers', {
         teachers: rows,
         pagination,
-        keyword
+        keyword,
+        formattedTopStudents
       })
     } catch (error) {
       next(error)
