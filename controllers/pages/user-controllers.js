@@ -1,9 +1,9 @@
 const { User, Teacher, Review, Appointment } = require('../../models')
-const { sequelize } = require('../../models')
-const { fn, col, literal, Op } = require('sequelize')
+const { fn, col, Op } = require('sequelize')
 const countries = require('world-countries')
 const { localFileHandler } = require('../../helpers/file-helpers')
 const { getAppointments } = require('../../helpers/appointments-helpers')
+const { getUsersSumDurations } = require('../../helpers/sum-duration-helper')
 
 const userControllers = {
   getProfile: async (req, res, next) => {
@@ -54,29 +54,12 @@ const userControllers = {
       let currentUserRank = null
 
       if (!user.isTeacher) {
-        // This is an ARRAY of OBJECTS, and each OBJECT has 'userId' and 'totalDuration'
-        const allUsersDurations = await Appointment.findAll({
-          attributes: [
-            'userId',
-            [fn('SUM', fn('TIMESTAMPDIFF', literal('MINUTE'), col('start_time'), col('end_time'))), 'totalMinutes']
-          ],
-          where: { status: 'finished' },
-          group: ['userId'],
-          order: [[sequelize.literal('totalMinutes'), 'DESC']],
-          raw: true
-        })
-
-        // Transform minutes to hours and format to one decimal place
-        const formattedDurations = allUsersDurations.map(user => ({
-          userId: user.userId,
-          totalDuration: (user.totalMinutes / 60).toFixed(1)
-        }))
-
-        const userDuration = formattedDurations.find(user => user.userId === userId)
+        const allUsersSumDurations = await getUsersSumDurations()
+        const userDuration = allUsersSumDurations.find(user => user.userId === userId)
 
         // Calculate the rank of the current user
-        currentUserTotalDuration = userDuration ? userDuration.totalDuration : '0.0'
-        currentUserRank = formattedDurations.findIndex(user => user.userId === userId) + 1
+        currentUserTotalDuration = userDuration ? userDuration.totalHours : '0.0'
+        currentUserRank = userDuration ? userDuration.rank : null
       }
 
       let averageScore = null

@@ -1,8 +1,8 @@
-const { sequelize } = require('../../models')
-const { Op, fn, col, literal } = require('sequelize')
+const { Op } = require('sequelize')
 const { User, Teacher, TeacherAvailability, Appointment } = require('../../models')
 const { getOffset, getPagination } = require('../../helpers/pagination-helper')
 const { processAvailabilities } = require('../../helpers/availability-student-side-helpers')
+const { getUsersSumDurations } = require('../../helpers/sum-duration-helper')
 
 const teacherControllers = {
   getTeachers: async (req, res, next) => {
@@ -22,7 +22,7 @@ const teacherControllers = {
           }
         : {}
 
-      const [{ count, rows }, topStudents] = await Promise.all([
+      const [{ count, rows }, formattedTopStudents] = await Promise.all([
         User.findAndCountAll({
           where,
           include: [{
@@ -35,31 +35,8 @@ const teacherControllers = {
           raw: true,
           nest: true
         }),
-        Appointment.findAll({
-          attributes: [
-            'userId',
-            [fn('SUM', fn('TIMESTAMPDIFF', literal('MINUTE'), col('start_time'), col('end_time'))), 'totalMinutes']
-          ],
-          include: [{
-            model: User,
-            as: 'student',
-            attributes: ['name', 'avatar']
-          }],
-          where: { status: 'finished' },
-          group: ['userId'],
-          order: [[sequelize.literal('totalMinutes'), 'DESC']],
-          limit: 10,
-          nest: true,
-          raw: true
-        })
+        getUsersSumDurations(10, true)
       ])
-
-      // Transform totalMinutes to hours and round to one decimal place
-      const formattedTopStudents = topStudents.map((student, index) => ({
-        ...student,
-        rank: index + 1,
-        totalHours: (student.totalMinutes / 60).toFixed(1)
-      }))
 
       const pagination = getPagination(count, page, limit)
 
