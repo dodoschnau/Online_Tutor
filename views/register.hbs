@@ -35,10 +35,14 @@
             placeholder="Confirm Password" name="confirmPassword">
         </div>
         <div>
-          <div>
-            <label for="inputNation" class="form-label">Nation</label>
+          <div class="mb-3 fs-4">
+            <label class="form-label">Nationality</label>
+            <select name="nation" class="form-select" required>
+              {{#each countryName}}
+              <option value="{{this}}">{{this}}</option>
+              {{/each}}
+            </select>
           </div>
-          <input type="text" class="form-control mb-3 border-2" id="inputNation" name="nation" placeholder="Enter Nation">
         </div>
 
         {{!-- Register Button --}}

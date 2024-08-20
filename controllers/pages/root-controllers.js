@@ -1,12 +1,18 @@
 const bcrypt = require('bcryptjs')
 const { User } = require('../../models')
+const countries = require('world-countries')
 
 const rootControllers = {
   loginPage: (req, res) => {
     res.render('login')
   },
-  registerPage: (req, res) => {
-    res.render('register')
+  registerPage: (req, res, next) => {
+    try {
+      const countryName = countries.map(country => country.name.common)
+      res.render('register', { countryName })
+    } catch (error) {
+      next(error)
+    }
   },
   register: async (req, res, next) => {
     try {
