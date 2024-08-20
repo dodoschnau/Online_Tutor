@@ -24,7 +24,7 @@ module.exports = {
         name: `user${index + 1}`,
         email: `user${index + 1}@example.com`,
         password: hash,
-        avatar: faker.image.avatar(),
+        avatar: `https://loremflickr.com/320/240/people,portrait/?random=${Math.random() * 100}`,
         nation: faker.location.country(),
         introduction: faker.lorem.sentence(),
         is_teacher: index < 30, // 只有前30個使用者是老師
