@@ -36,7 +36,11 @@ const rootControllers = {
   },
   login: (req, res) => {
     req.flash('success', 'Logged in successfully.')
-    return res.redirect('/teachers')
+    if (req.user.isAdmin) {
+      return res.redirect('/admin')
+    } else {
+      return res.redirect('/teachers')
+    }
   },
   logout: async (req, res, next) => {
     req.logout((err) => {

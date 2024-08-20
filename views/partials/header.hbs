@@ -1,7 +1,11 @@
 <header>
   <nav class="navbar navbar-expand-lg fixed-top bg-dark px-4" data-bs-theme="dark">
     <div class="container-fluid">
+      {{#if user.isAdmin}}
+      <a class="navbar-brand fs-3" href="/admin">Tutor</a>
+      {{else}}
       <a class="navbar-brand fs-3" href="/teachers">Tutor</a>
+      {{/if}}
 
       {{#if user}}
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
@@ -9,6 +13,16 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+        {{#if user.isAdmin}}
+
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item fs-5 d-inline-flex align-items-center me-2">
+            <span class="ms-5 text-secondary">Admin Dashboard</span>
+          </li>
+        </ul>
+
+        {{else}}
 
         {{!-- User Profile --}}
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -29,6 +43,8 @@
           {{/ifBooleanCond}}
 
         </ul>
+
+        {{/if}}
 
         {{!-- Logout Button --}}
         <div class="nav-item">

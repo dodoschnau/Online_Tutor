@@ -1,0 +1,41 @@
+{{> messages}}
+
+<div class="container">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">NAME</th>
+        <th scope="col">IS TEACHER</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+      <tr>
+        <th scope="row">
+          {{this.id}}
+        </th>
+        <td>
+          <img src="{{this.avatar}}" class="rounded-circle" alt="User image" width="50" height="50">
+          {{this.name}}
+        </td>
+        <td>
+          {{#if this.isTeacher}}
+          Teacher
+          {{else}}
+          Normal User
+          {{/if}}
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <nav>
+    <ul class="pagination justify-content-center">
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item"><a class="page-link" href="#">4</a></li>
+    </ul>
+  </nav>
+</div>
