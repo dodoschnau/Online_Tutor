@@ -2,18 +2,34 @@
   <div class="row">
 
     <!-- The left side of the page -->
-    <div class="col-md-3">
-      <div class="mb-3 text-center">
+    <div class="col-md-6">
+      <div class="mb-3 d-flex">
         <img src="{{teacher.user.avatar}}" class="rounded" alt="Teacher-Image" width="250" height="250">
+        <div class="ms-5">
+          <h1>{{teacher.user.name}}</h1>
+          <p>{{teacher.user.nation}}</p>
+          <p>❤ 4.8</p>
+        </div>
       </div>
+      
+      <!-- The middle of the page -->
+      <div>
+        <h3>Introduction</h3>
+        <p>{{teacher.user.introduction}}</p>
+
+        <h3>Teaching Style</h3>
+        <p>{{teacher.teachingStyle}}</p>
+
+        <h3>Lesson History</h3>
+        <p><span class="bg-warning px-1">4.8</span> Big company announcement or simple sub-header taking two or more
+          lines.</p>
+        <p><span class="bg-warning px-1">4.8</span> Big company announcement or simple sub-header taking two or more
+          lines.</p>
+      </div>
+
     </div>
 
-    <!-- The middle of the page -->
-    <div class="col-md-3">
-      <h1>{{teacher.user.name}}</h1>
-      <p>{{teacher.user.nation}}</p>
-      <p>❤ 4.8</p>
-    </div>
+
 
     <!-- The right side of the page -->
     <div class="col-md-6">
@@ -40,22 +56,10 @@
         </div>
       </form>
     </div>
-    
+
   </div>
 
-  <div>
-    <h3>Introduction</h3>
-    <p>{{teacher.user.introduction}}</p>
 
-    <h3>Teaching Style</h3>
-    <p>{{teacher.teachingStyle}}</p>
-
-    <h3>Lesson History</h3>
-    <p><span class="bg-warning px-1">4.8</span> Big company announcement or simple sub-header taking two or more
-      lines.</p>
-    <p><span class="bg-warning px-1">4.8</span> Big company announcement or simple sub-header taking two or more
-      lines.</p>
-  </div>
 </div>
 
 
