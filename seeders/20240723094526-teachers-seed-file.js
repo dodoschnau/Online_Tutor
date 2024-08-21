@@ -14,7 +14,7 @@ module.exports = {
     const teachersData = users.map(user => ({
       teaching_style: faker.lorem.sentence(),
       video_link: faker.internet.url(),
-      lesson_duration: [60, 90][Math.floor(Math.random() * 2)], // 隨機產生60分鐘或90分鐘
+      lesson_duration: [30, 60, 90][Math.floor(Math.random() * 3)], // 隨機產生30分鐘、60分鐘或90分鐘
       lesson_description: faker.lorem.paragraph(),
       user_id: user.id,
       created_at: new Date(),
