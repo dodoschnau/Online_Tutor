@@ -1,0 +1,46 @@
+{{!-- Pagination --}}
+<div class="d-flex justify-content-center mb-5">
+  <ul class="pagination">
+
+    {{!-- Previous Button --}}
+
+    <form action="{{#if user.isAdmin}}/admin{{else}}/teachers{{/if}}" method="GET" class="d-flex">
+      <li class="page-item me-2">
+        <button type="submit" class="btn btn-secondary {{#ifCond pagination.page 1}}disabled{{/ifCond}}">Previous
+          <input type="hidden" name="page" value="{{pagination.prev}}">
+          {{#ifBooleanCond users.isAdmin false}}
+          <input type="hidden" name="keyword" value="{{../keyword}}">
+          {{/ifBooleanCond}}
+        </button>
+      </li>
+    </form>
+
+    {{!-- Pages --}}
+    {{#each pagination.pages}}
+    <form action="{{#if ../user.isAdmin}}/admin{{else}}/teachers{{/if}}" method="GET" class="d-flex">
+        <li class="page-item page-button me-2">
+          <button type="submit" class="btn btn-primary {{#ifCond this ../pagination.page}}disabled{{/ifCond}}">{{this}}
+            <input type="hidden" name="page" value="{{this}}">
+            {{#ifBooleanCond users.isAdmin false}}
+            <input type="hidden" name="keyword" value="{{../../keyword}}">
+            {{/ifBooleanCond}}
+          </button>
+        </li>
+      </form>
+      {{/each}}
+
+      {{!-- Next Button --}}
+      <form action="{{#if user.isAdmin}}/admin{{else}}/teachers{{/if}}" method="GET" class="d-flex">
+          <li class="page-item">
+            <button type="submit"
+              class="btn btn-secondary {{#ifCond pagination.page pagination.totalPages}}disabled{{/ifCond}}">Next
+              <input type="hidden" name="page" value="{{pagination.next}}">
+              {{#ifBooleanCond users.isAdmin false}}
+              <input type="hidden" name="keyword" value="{{../keyword}}">
+              {{/ifBooleanCond}}
+            </button>
+          </li>
+        </form>
+
+  </ul>
+</div>
