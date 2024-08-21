@@ -22,11 +22,14 @@
           <input type="password" class="form-control mb-4 border-2" id="loginInputPassword" placeholder="Enter Password"
             name="password">
         </div>
-        
+
         {{!-- Login Button --}}
         <button type="submit" class="btn btn-primary mb-3 fw-bold">Login</button>
-      
+
       </form>
+
+      {{!-- Google Login Button --}}
+      {{> google-login-button}}
 
       {{!-- Register Button --}}
       <div>
