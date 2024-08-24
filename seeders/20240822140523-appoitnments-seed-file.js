@@ -11,9 +11,9 @@ module.exports = {
     const teachers = await Teacher.findAll({ attributes: ['id', 'lessonDuration'], raw: true })
     const appointments = []
 
-    await generateAppointments(users, teachers, appointments, 'finished', 2)
-    await generateAppointments(users, teachers, appointments, 'finished', 2, true)
-    await generateAppointments(users, teachers, appointments, 'pending', 2, true)
+    await generateAppointments(users, teachers, appointments, 'finished', 4)
+    await generateAppointments(users, teachers, appointments, 'finished', 4, true)
+    await generateAppointments(users, teachers, appointments, 'pending', 4, true)
 
     await queryInterface.bulkInsert('Appointments', appointments, {})
   },
