@@ -13,7 +13,7 @@ const path = require('path')
 const app = express()
 const port = process.env.PORT || 3000
 
-const { pages } = require('./routes')
+const router = require('./routes')
 const handlebarsHelpers = require('./helpers/handlebars-helpers')
 const messageHandler = require('./middlewares/message-handler')
 const { getUser } = require('./helpers/auth-helpers')
@@ -47,7 +47,7 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(pages)
+app.use(router)
 
 app.listen(port, () => {
   console.log(`Express server is running on http://localhost:${port}`)
