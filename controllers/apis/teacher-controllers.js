@@ -15,6 +15,24 @@ const teacherControllers = {
 
       const pagination = getPagination(count, page, limit)
 
+      if (page > pagination.totalPages || page < 1 || limit < 1) {
+        const err = new Error('Invalid page or limit value')
+        err.status = 400
+        throw err
+      }
+
+      if (!teachers.length) {
+        const err = new Error('No teachers found')
+        err.status = 404
+        throw err
+      }
+
+      if (!formattedTopStudents.length) {
+        const err = new Error('No top students found')
+        err.status = 404
+        throw err
+      }
+
       const responseData = {
         teachers,
         pagination,
