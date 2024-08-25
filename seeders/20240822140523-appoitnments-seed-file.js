@@ -6,7 +6,7 @@ const { generateSlots } = require('../helpers/availability-student-side-helpers'
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    const users = await User.findAll({ attributes: ['id'], where: { isTeacher: false }, raw: true })
+    const users = await User.findAll({ attributes: ['id'], where: { isTeacher: false, isAdmin: false }, raw: true })
 
     const teachers = await Teacher.findAll({ attributes: ['id', 'lessonDuration'], raw: true })
     const appointments = []
