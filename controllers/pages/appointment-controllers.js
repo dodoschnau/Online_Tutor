@@ -42,7 +42,8 @@ const appointmentControllers = {
         where: {
           date,
           startTime,
-          endTime
+          endTime,
+          teacherId // need to filter out which teacher's appointment is being created
         }
       })
       if (existingAppointment) throw new Error('This time slot has already been booked.')

@@ -1,4 +1,5 @@
 const { getOffset, getPagination } = require('../../helpers/pagination-helper')
+const { processAvailabilities } = require('../../helpers/availability-student-side-helpers')
 
 const teacherService = require('../../services/teacher-service')
 
@@ -40,6 +41,36 @@ const teacherControllers = {
         formattedTopStudents
       }
       return res.json({ status: 'success', data: responseData })
+    } catch (error) {
+      next(error)
+    }
+  },
+  getTeacher: async (req, res, next) => {
+    try {
+      const { id } = req.params
+      const [appointmentData] = req.flash('appointment')
+
+      const { teacher, averageScore, appointments } = await teacherService.getTeacher(id)
+
+      const availabilities = teacher.toJSON().availableTime.map(slot => ({
+        date: slot.date,
+        startTime: slot.startTime,
+        endTime: slot.endTime
+      }))
+
+      const lessonDuration = teacher.toJSON().lessonDuration
+
+      const { processedAvailability, hasAvailableSlots } = processAvailabilities(availabilities, lessonDuration, appointments)
+
+      const data = {
+        teacher: teacher.toJSON(),
+        processedAvailabilities: processedAvailability,
+        appointment: appointmentData,
+        hasAvailableSlots,
+        averageScore
+      }
+
+      return res.json({ status: 'success', data })
     } catch (error) {
       next(error)
     }
