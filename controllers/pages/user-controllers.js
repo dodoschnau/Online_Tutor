@@ -1,9 +1,10 @@
-const { User, Teacher, Review, Appointment } = require('../../models')
-const { fn, col, Op } = require('sequelize')
+const { User, Teacher, Review } = require('../../models')
+const { Op } = require('sequelize')
 const countries = require('world-countries')
 const { localFileHandler } = require('../../helpers/file-helpers')
 const { getAppointments } = require('../../helpers/appointments-helpers')
 const { getUsersSumDurations } = require('../../helpers/sum-duration-helper')
+const { getAverageScore } = require('../../helpers/average-score-helper')
 
 const userControllers = {
   getProfile: async (req, res, next) => {
@@ -65,20 +66,7 @@ const userControllers = {
       let averageScore = null
       if (user.isTeacher) {
         // Get the average score of the teacher's reviews
-        const teacherReviews = await Review.findAll({
-          attributes: [
-            [fn('AVG', col('score')), 'averageScore']
-          ],
-          include: [{
-            model: Appointment,
-            as: 'appointment',
-            attributes: [],
-            where: { teacherId: user.teacher.id }
-          }],
-          raw: true
-        })
-
-        averageScore = teacherReviews[0].averageScore ? Number(teacherReviews[0].averageScore).toFixed(1) : null
+        averageScore = await getAverageScore(user.teacher.id)
       }
 
       const viewName = isTeacher ? 'users/teacher-profile' : 'users/profile'

@@ -8,10 +8,20 @@
         <div class="ms-5">
           <h1>{{teacher.user.name}}</h1>
           <p>{{teacher.user.nation}}</p>
-          <p>❤ 4.8</p>
+          {{#if averageScore}}
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-heart me-2" style="color: #ff4d4d;"></i>
+            <spam>{{averageScore}}</span>
+          </div>
+          {{else}}
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-heart me-2" style="color: #ff4d4d;"></i>
+            <span>There is no score yet.</span>
+          </div>
+          {{/if}}
         </div>
       </div>
-      
+
       <!-- The middle of the page -->
       <div>
         <h3>Introduction</h3>
@@ -21,10 +31,11 @@
         <p>{{teacher.teachingStyle}}</p>
 
         <h3>Lesson History</h3>
-        <p><span class="bg-warning px-1">4.8</span> Big company announcement or simple sub-header taking two or more
-          lines.</p>
-        <p><span class="bg-warning px-1">4.8</span> Big company announcement or simple sub-header taking two or more
-          lines.</p>
+        {{#each teacher.appointments}}
+        {{#if this.review}}
+        <p><span class="bg-warning px-1">{{this.review.score}}</span> {{this.review.message}}</p>
+        {{/if}}
+        {{/each}}
       </div>
 
     </div>

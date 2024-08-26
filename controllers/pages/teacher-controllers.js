@@ -1,7 +1,8 @@
-const { User, Teacher, TeacherAvailability, Appointment } = require('../../models')
+const { User, Teacher, TeacherAvailability, Appointment, Review } = require('../../models')
 const { getOffset, getPagination } = require('../../helpers/pagination-helper')
 const { processAvailabilities } = require('../../helpers/availability-student-side-helpers')
 const teacherService = require('../../services/teacher-service')
+const { getAverageScore } = require('../../helpers/average-score-helper')
 
 const teacherControllers = {
   getTeachers: async (req, res, next) => {
@@ -40,10 +41,25 @@ const teacherControllers = {
           {
             model: TeacherAvailability,
             as: 'availableTime'
+          },
+          {
+            model: Appointment,
+            as: 'appointments',
+            where: { status: 'finished' },
+            attributes: ['id'],
+            include: [{
+              model: Review,
+              as: 'review',
+              attributes: ['score', 'message']
+            }],
+            limit: 5
           }
         ]
       })
       if (!teacher) throw new Error('Cannot find teacher.')
+
+      let averageScore = null
+      averageScore = await getAverageScore(id)
 
       const availabilities = teacher.toJSON().availableTime.map(slot => ({
         date: slot.date,
@@ -65,7 +81,8 @@ const teacherControllers = {
         teacher: teacher.toJSON(),
         processedAvailabilities: processedAvailability,
         appointment: appointmentData,
-        hasAvailableSlots
+        hasAvailableSlots,
+        averageScore
       })
     } catch (error) {
       next(error)
