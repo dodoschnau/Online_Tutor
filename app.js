@@ -25,6 +25,7 @@ app.engine('.hbs', engine({
 app.set('view engine', '.hbs')
 app.set('views', './views')
 
+app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
