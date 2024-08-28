@@ -1,6 +1,8 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
+const JwtStrategy = require('passport-jwt').Strategy
+const ExtractJwt = require('passport-jwt').ExtractJwt
 
 const bcrypt = require('bcryptjs')
 
@@ -27,6 +29,22 @@ passport.use(new LocalStrategy(
     }
   })
 )
+
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET
+}
+
+passport.use(new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
+  try {
+    const user = await User.findByPk(jwtPayload.id)
+    if (!user) return done(null, false)
+
+    return done(null, user)
+  } catch (error) {
+    return done(null, false)
+  }
+}))
 
 // Google Strategy
 passport.use(new GoogleStrategy({

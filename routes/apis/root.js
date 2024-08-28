@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const passport = require('../../config/passport')
+
+const { localAuthenticate } = require('../../middlewares/api-auth')
 
 const rootControllers = require('../../controllers/apis/root-controllers')
 
-router.post('/login', passport.authenticate('local', { session: false }), rootControllers.login)
+router.post('/login', localAuthenticate, rootControllers.login)
 
 module.exports = router
