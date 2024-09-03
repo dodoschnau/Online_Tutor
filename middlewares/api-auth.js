@@ -2,7 +2,12 @@ const passport = require('../config/passport')
 
 module.exports = {
   // using passport's JWT strategy for authentication, without using session
-  authenticated: passport.authenticate('jwt', { session: false }),
+  authenticated: (req, res, next) => {
+    passport.authenticate('jwt', { session: false }, (err, user) => {
+      if (err || !user) return res.status(401).json({ status: 'error', message: 'You are not authorized to access this page.' })
+      next()
+    })(req, res, next)
+  },
 
   // check if the account is admin
   authenticatedAdmin: async (req, res, next) => {
