@@ -5,6 +5,7 @@ const { localAuthenticate } = require('../../middlewares/api-auth')
 
 const rootControllers = require('../../controllers/apis/root-controllers')
 
+router.post('/register', rootControllers.register)
 router.post('/login', localAuthenticate, rootControllers.login)
 
 module.exports = router
