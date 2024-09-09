@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:dev": "cross-env NODE_ENV=development nodemon app.js",
+    "seed": "npx sequelize db:seed:all"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
+    "cross-env": "^7.0.3",
     "standard": "^17.1.0"
   }
 }
